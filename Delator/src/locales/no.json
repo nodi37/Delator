@@ -1,0 +1,20 @@
+{
+  "dashboard": "Dashboard",
+  "employees": "Employees",
+  "settings": "Settings",
+  
+
+  "employee": "Employee",
+  "leader": "Leader",
+
+  "add-employee": "Add employee",
+  "name": "Name",
+  "surname": "Surname",
+  "e-mail-adress": "E-mail adress",
+  "phone-number": "Phone number",
+  "hourly-rate": "Hourly rate",
+  "position": "Position",
+  "photo": "Photo",
+  "clean": "Clean",
+  "save": "Save"
+}

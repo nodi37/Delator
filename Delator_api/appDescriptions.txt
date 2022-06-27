@@ -1,0 +1,9 @@
+//Privlege lvls
+
+0 - highest - admin only
+1 - Company Owner
+2 - Employee
+
+//Pricing plans
+0 - free
+1 - next

@@ -1,0 +1,49 @@
+Delator/.DS_Store
+Delator/node_modules
+Delator/dist
+
+
+# local env files
+Delator/.env
+Delator/.env.local
+Delator/.env.*.local
+
+# Log files
+Delator/npm-debug.log*
+Delator/yarn-debug.log*
+Delator/yarn-error.log*
+Delator/pnpm-debug.log*
+
+# Editor directories and files
+Delator/.idea
+Delator/.vscode
+Delator/*.suo
+Delator/*.ntvs*
+Delator/*.njsproj
+Delator/*.sln
+Delator/*.sw?
+
+
+Delator_api/.DS_Store
+Delator_api/node_modules
+Delator_api/dist
+
+# local env files
+Delator_api/.env
+Delator_api/.env.local
+Delator_api/.env.*.local
+
+# Log files
+Delator_api/npm-debug.log*
+Delator_api/yarn-debug.log*
+Delator_api/yarn-error.log*
+Delator_api/pnpm-debug.log*
+
+# Editor directories and files
+Delator_api/.idea
+Delator_api/.vscode
+Delator_api/*.suo
+Delator_api/*.ntvs*
+Delator_api/*.njsproj
+Delator_api/*.sln
+Delator_api/*.sw?
