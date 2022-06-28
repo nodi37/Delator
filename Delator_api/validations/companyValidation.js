@@ -14,6 +14,14 @@ module.exports.editCompanySchema = yup.object({
     logo: yup.string()
 });
 
+module.exports.getManyCompaniesSchema = yup.object({
+    skip: yup.number().positive().integer(),
+    limit: yup.number().positive().integer(),
+    keyword: yup.string(),
+    orderBy: yup.string(),
+    sortOrder: yup.number().min(0).max(1)
+});
+
 module.exports.idParamSchema = yup.object({
     id: yup.number().positive().integer().required()
 });

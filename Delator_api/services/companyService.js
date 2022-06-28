@@ -1,5 +1,6 @@
 const { pool } = require('../helpers/dbPoolProvider');
 const { maxResponseCount } = require('../config/companyRequestConfig');
+const { calculateSkipLimit } = require('../helpers/skipLimitCalculator');
 const { createInsertQueryString, createUpdateQueryString, createDeleteQueryString, createSelectQueryString } = require('../helpers/queryStringCreators');
 
 const table = 'system.companies';
@@ -59,7 +60,7 @@ const replaceExistingCompany = async (body, id) => {
 
 const getOneCompany = async (id) => {
     const condition = 'company_id = ' + id;
-    const query = createSelectQueryString(null, table, condition);
+    const query = createSelectQueryString('all', table, condition);
     try {
         const found = await pool.query(query);
         return found;
@@ -70,21 +71,20 @@ const getOneCompany = async (id) => {
 
 const getManyCompanies = async (params) => {
 
+    //sortOrder 0/1
+    //orderBy - column name
+
     const condition = !!params.keyword ? `company_name ILIKE '%${params.keyword}%'` : null;
-    const limitInt = parseInt(params.limit, 10);
-    const skipInt = parseInt(params.skip, 10) || 0;
-    const limit = (!limitInt || limitInt > maxResponseCount) ? skipInt + maxResponseCount : limitInt;
-
-    const query = createSelectQueryString(null, table, condition, limit, skipInt);
-
+    const sortOrder = parseInt(params.sortOrder)?'DESC':'ASC';
+    const orderBy = !!params.orderBy? `${params.orderBy} ${sortOrder}`:null;
+    const {skip, limit} = calculateSkipLimit(params.skip, params.limit, maxResponseCount);
+    const query = createSelectQueryString('all', table, condition, orderBy, limit, skip);
     try {
         const found = await pool.query(query);
         return found;
     } catch (error) {
         console.log(error);
     }
-
-    //DODAC SORTOWANIE/VALIDACJE PARAMETRÓW
 }
 
 

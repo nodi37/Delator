@@ -46,36 +46,29 @@ const createDeleteQueryString = (condition, table, isReturningValue) => {
         ${returning}`;
 }
 
-const createSelectQueryString = (fields, table, condition, limit, skip) => {
+const createSelectQueryString = (fields, table, condition, orderBy, limit, skip) => {
 
-    let query = '';
-    let fieldsString = '*';
+    let fieldsString = fields=='all'?'*':'';
     const skipValue = skip || 0;
     const limitValue = limit || 1;
 
-    if (!!fields) {
+    const cond = !!condition?`WHERE ${condition}`:'';
+    const order = !!orderBy?`ORDER BY ${orderBy}`:'';
+
+    if (!!fields&&fields!=='all') {
         fieldsString = '';
         fields.forEach((field, index) => {
             const ending = index + 1 === arrayLength ? '' : ', ';
             fieldsString += field+ending;
-        })
+        });
     }
 
-
-    if(!!condition) {
-        query = `
+    return `
         SELECT ${fieldsString} FROM ${table}
-        WHERE ${condition}
+        ${cond}
+        ${order}
         LIMIT ${limitValue}
         OFFSET ${skipValue}`;
-    } else {
-        query = `
-        SELECT ${fieldsString} FROM ${table}
-        LIMIT ${limitValue}
-        OFFSET ${skipValue}`;
-    }
-
-    return query;
 }
 
 
