@@ -21,7 +21,3 @@ module.exports.getManyCompaniesSchema = yup.object({
     orderBy: yup.string(),
     sortOrder: yup.number().min(0).max(1)
 });
-
-module.exports.idParamSchema = yup.object({
-    id: yup.number().positive().integer().required()
-});

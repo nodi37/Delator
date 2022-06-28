@@ -32,10 +32,10 @@ const createUsersTable = async () => {
     const QUERY = `
     CREATE TABLE IF NOT EXISTS system.users (
     user_id serial PRIMARY KEY, 
-    company_id VARCHAR NOT NULL,
+    company_id VARCHAR,
     first_name VARCHAR NOT NULL,
     last_name VARCHAR NOT NULL,
-    email VARCHAR NOT NULL,
+    email VARCHAR UNIQUE NOT NULL,
     password VARCHAR NOT NULL,
     phone_number NUMERIC,
     hourly_rate NUMERIC,

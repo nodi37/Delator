@@ -6,4 +6,8 @@
 
 //Pricing plans
 0 - free
-1 - next
+1++ - next++
+
+//ToDo
+Fix request validators and tables
+

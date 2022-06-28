@@ -2,8 +2,9 @@ const express = require("express");
 const router = express.Router();
 const companyController = require('../controllers/company.controller');
 
-const {validateRequestBody, validateRequestParams, validateRequestQuery} = require('../middlewares/requestValidationMiddlewares');
-const {addCompanySchema, editCompanySchema, getManyCompaniesSchema, idParamSchema } = require('../validations/companyValidation');
+const { validateRequestBody, validateRequestParams, validateRequestQuery } = require('../middlewares/requestValidationMiddlewares');
+const { addCompanySchema, editCompanySchema, getManyCompaniesSchema } = require('../validations/companyValidation');
+const { idParamSchema } = require('../validations/sharedValidations');
 
 router.post('/', validateRequestBody(addCompanySchema), companyController.addCompany);
 router.patch('/:id', validateRequestParams(idParamSchema), validateRequestBody(editCompanySchema), companyController.editCompany); //Updates partial

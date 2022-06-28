@@ -8,13 +8,16 @@ const cors = require('cors');
 const corsConfig = require('./config/corsConfig');
 
 //Helpers
-const {initApp} = require('./helpers/appInitializer');
+const { initApp } = require('./helpers/appInitializer');
+
+//Middlewares
+const { handleJsonError } = require('./middlewares/JSONValidator');
 
 
 app.set('trust proxy', true);
 app.use(cors(corsConfig));
 app.use(express.json());
-
+app.use(handleJsonError);
 
 
 //Routes
@@ -44,7 +47,7 @@ app.use('/v1/company', companyRoutes);
 
 
 
-app.listen(port, ()=>{
+app.listen(port, () => {
     initApp();
     console.log(`Api works on port ${port}`)
 });
