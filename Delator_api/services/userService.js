@@ -1,10 +1,5 @@
-const { pool } = require('../helpers/dbPoolProvider');
 const { maxResponseCount } = require('../config/userRequestConfig');
 const { calculateSkipLimit } = require('../helpers/skipLimitCalculator');
-const { createInsertQueryString, createUpdateQueryString, createDeleteQueryString, createSelectQueryString } = require('../helpers/queryStringCreators');
-
-const table = 'system.users';
-
 
 const saveNewUser = async (body) => {
     const query = createInsertQueryString(body, table, true);
@@ -71,7 +66,7 @@ const getOneUser = async (id) => {
 const getManyUsers = async (params) => {
 
     //sortOrder 0/1
-    //orderBy - column name
+    //sortBy - column name
 
     const phoneNumberCondition = !isNaN(params.keyword)?`OR phone_number = ${params.keyword}`:'';
 
@@ -83,9 +78,9 @@ const getManyUsers = async (params) => {
         : null;
 
     const sortOrder = parseInt(params.sortOrder)?'DESC':'ASC';
-    const orderBy = !!params.orderBy? `${params.orderBy} ${sortOrder}`:null;
+    const sortBy = !!params.sortBy? `${params.sortBy} ${sortOrder}`:null;
     const {skip, limit} = calculateSkipLimit(params.skip, params.limit, maxResponseCount);
-    const query = createSelectQueryString('all', table, condition, orderBy, limit, skip);
+    const query = createSelectQueryString('all', table, condition, sortBy, limit, skip);
 
     try {
         const found = await pool.query(query);

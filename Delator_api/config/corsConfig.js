@@ -1,3 +1,5 @@
-const corsConfig = { origin: '*' };
+const corsConfig = { 
+    origin: '*' 
+};
 
 module.exports = corsConfig;

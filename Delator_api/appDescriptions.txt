@@ -8,6 +8,169 @@
 0 - free
 1++ - next++
 
-//ToDo
-Fix request validators and tables
+//settlementMethod
+0 - Daily overtime
+1 - Weelky overtime
 
+//Overtimy
+0 - 0%
+0.12 - 12%
+1 - 100%
+
+
+//ToDo
+Switch to mongoDB
+Match request validators and tables properties
+
+company = {
+    id: string,
+    name: string,
+    administrators: [
+        id: number,
+        id: number
+    ],
+    defHourlyRate: number
+    defTotalBreakTime: number,
+    settlementMethod: number,
+    stdHrsPerDay: number,
+    overtimeAllowance: numer, //% 0-1
+    freeDaysAllowance: number, //% 0-1
+    pricingPlan: number,
+    logo: Base64 - string - compressed (SHARP)
+}
+
+user = {
+    first_name: string,
+    last_name: string,
+    companies: [
+        {
+            id: number,
+            hourlyRate: number,
+            defTotalBreakTime: number,
+            settlementMethod: number,
+            stdHrsPerDay: number,
+            overtimeAllowance: numer, //% 0-1
+            freeDaysAllowance: number //% 0-1
+        },
+        {
+            id: number,
+            hourlyRate: number,            
+            defTotalBreakTime: number,
+            settlementMethod: number,
+            stdHrsPerDay: number,
+            overtimeAllowance: numer, //% 0-1
+            freeDaysAllowance: number //% 0-1
+        }
+    ],
+    email: string
+    password: string
+    phone_number: number
+    privlege_level: number
+    photo: Base64 - string - compressed
+});
+
+
+raport = {
+    user_id: number,
+    company_id: number,
+    date: date,
+    hours: [
+        {
+            from: date/time, 
+            to: date/time, 
+            hoursCalculated: number //Rodzielić dni przy nockach
+        },
+        {
+            from: date/time, 
+            to: date/time, 
+            hoursCalculated: number
+        }
+    ],
+    additional: [
+        {
+            value: number, 
+            name: string,
+            description: string,
+            photo: Base64 - string
+        },
+        {
+            value: number, 
+            name: string,
+            description: string,
+            photo: Base64 - string
+        }
+    ]
+    hoursCount: number,
+    hourWage: number,
+    additionalValue: number,
+    total: number
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+weekRaport = {
+    user_id: number,
+    company_id: number,
+    days: [
+        {
+            mon: {
+                hours: [
+                    {from: date/time, to: date/time , hoursCalculated: number},
+                    {from: date/time, to: date/time , hoursCalculated: number}
+                ],
+                additional: [
+                    {
+                        value: number, 
+                        name: string,
+                        description: string,
+                        photo: Base64 - string
+                    },
+                    {
+                        value: number, 
+                        name: string,
+                        description: string,
+                        photo: Base64 - string
+                    }
+                ]
+            }
+        },
+
+        tue: {
+
+        },
+
+        wed: {
+
+        },
+
+        thu: {
+
+        },
+
+        fri: {
+
+        }
+    ]
+}

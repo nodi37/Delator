@@ -28,6 +28,6 @@ module.exports.getManyUsersSchema = yup.object({
     skip: yup.number().positive().integer(),
     limit: yup.number().positive().integer(),
     keyword: yup.string(),
-    orderBy: yup.string(),
-    sortOrder: yup.number().min(0).max(1)
+    sortBy: yup.string(),
+    sortOrder: yup.string().matches('descending','SortOrder accepts only >descending< keyword, use it to reverse sorting')
 });

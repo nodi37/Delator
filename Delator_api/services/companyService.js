@@ -1,17 +1,13 @@
-const { pool } = require('../helpers/dbPoolProvider');
+const { query } = require('express');
 const { maxResponseCount } = require('../config/companyRequestConfig');
 const { calculateSkipLimit } = require('../helpers/skipLimitCalculator');
-const { createInsertQueryString, createUpdateQueryString, createDeleteQueryString, createSelectQueryString } = require('../helpers/queryStringCreators');
-
-const table = 'system.companies';
+const Company = require('../models/Company');
 
 
 const saveNewCompany = async (body) => {
-    const query = createInsertQueryString(body, table, true);
-
     try {
-        const added = await pool.query(query);
-        return added;
+        const response = await new Company(body).save();
+        return response;
     } catch (error) {
         console.log(error);
     }
@@ -19,12 +15,9 @@ const saveNewCompany = async (body) => {
 
 
 const editExistingCompany = async (body, id) => {
-    const condition = 'company_id = ' + id;
-    const query = createUpdateQueryString(body, condition, table, true);
-
     try {
-        const edited = await pool.query(query);
-        return edited;
+        const response = await Company.findByIdAndUpdate(id, body, { returnDocument: 'after' });
+        return response;
     } catch (error) {
         console.log(error);
     }
@@ -32,12 +25,9 @@ const editExistingCompany = async (body, id) => {
 
 
 const deleteSingleCompany = async (id) => {
-    const condition = 'company_id = ' + id;
-    const query = createDeleteQueryString(condition, table, true);
-
     try {
-        const deleted = await pool.query(query);
-        return deleted;
+        const response = await Company.findByIdAndDelete(id)
+        return response;
     } catch (error) {
         console.log(error);
     }
@@ -45,43 +35,65 @@ const deleteSingleCompany = async (id) => {
 
 const replaceExistingCompany = async (body, id) => {
     try {
-        const deleted = await deleteSingleCompany(id);
-        if (deleted.rowCount > 0) {
-            const query = createInsertQueryString({ company_id: id, ...body }, table, true);
-            const added = await pool.query(query);
-            return added;
-        } else {
-            return deleted;
-        }
+        const response = await Company.findOneAndReplace({ _id: id }, body);
+        return response;
     } catch (error) {
         console.log(error);
     }
 }
 
 const getOneCompany = async (id) => {
-    const condition = 'company_id = ' + id;
-    const query = createSelectQueryString('all', table, condition);
     try {
-        const found = await pool.query(query);
-        return found;
+        const response = await Company.findById(id)
+        return response;
     } catch (error) {
         console.log(error);
     }
 }
 
 const getManyCompanies = async (params) => {
+    //Automatically creates queryObject based on params and keys and schema
+    //To add new filter just Add entry in validator scheme to let it pass a param and all will be done automatically
+    const { skip, limit } = calculateSkipLimit(params.skip, params.limit, maxResponseCount);
+    const schemaKeys = Object.keys(Company.schema.paths);
+    const sortBy = params.sortBy || 'name';
+    const sortOrder = params.sortOrder || 'ascending';
 
-    //sortOrder 0/1
-    //orderBy - column name
+    const entries = new Map();
 
-    const condition = !!params.keyword ? `company_name ILIKE '%${params.keyword}%'` : null;
-    const sortOrder = parseInt(params.sortOrder)?'DESC':'ASC';
-    const orderBy = !!params.orderBy? `${params.orderBy} ${sortOrder}`:null;
-    const {skip, limit} = calculateSkipLimit(params.skip, params.limit, maxResponseCount);
-    const query = createSelectQueryString('all', table, condition, orderBy, limit, skip);
+    for (const [key, value] of Object.entries(params)) {
+        if (schemaKeys.includes(key)) {
+            entries.set(key, value);
+        }
+    }
+
+    const queryObject = Object.fromEntries(entries) || {};
+
+    //Keyword search
+    //To add add field to keyword search:
+    if (!!params.keyword) {
+        const regex = new RegExp(params.keyword,'i');
+        const toSearch = [
+            //Add here fields with String type like below:
+            //{>fieldName<: regex},
+            {name: regex },
+            {description: regex},
+            {administrators: regex}
+        ]
+
+        if(!isNaN(params.keyword)) {
+            const kwrdInt = parseInt(params.keyword);
+            //Push here new object to toSearch array like below
+            //toSearch.push({>fieldName<: kwrdInt});
+            toSearch.push({orgNumber: kwrdInt});
+        }
+
+        queryObject.$or = toSearch 
+    }
+
     try {
-        const found = await pool.query(query);
-        return found;
+        const response = await Company.find(queryObject).sort([[sortBy, sortOrder]]).skip(skip).limit(limit);
+        return response;
     } catch (error) {
         console.log(error);
     }
