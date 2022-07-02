@@ -1,6 +1,6 @@
-const { query } = require('express');
 const { maxResponseCount } = require('../config/companyRequestConfig');
 const { calculateSkipLimit } = require('../helpers/skipLimitCalculator');
+const { createQueryObject, createKeywordSearchArray } = require('../helpers/queryObjectCreators');
 const Company = require('../models/Company');
 
 
@@ -23,19 +23,18 @@ const editExistingCompany = async (body, id) => {
     }
 }
 
-
-const deleteSingleCompany = async (id) => {
+const replaceExistingCompany = async (body, id) => {
     try {
-        const response = await Company.findByIdAndDelete(id)
+        const response = await Company.findOneAndReplace({ _id: id }, body);
         return response;
     } catch (error) {
         console.log(error);
     }
 }
 
-const replaceExistingCompany = async (body, id) => {
+const deleteSingleCompany = async (id) => {
     try {
-        const response = await Company.findOneAndReplace({ _id: id }, body);
+        const response = await Company.findByIdAndDelete(id)
         return response;
     } catch (error) {
         console.log(error);
@@ -52,43 +51,29 @@ const getOneCompany = async (id) => {
 }
 
 const getManyCompanies = async (params) => {
-    //Automatically creates queryObject based on params and keys and schema
-    //To add new filter just Add entry in validator scheme to let it pass a param and all will be done automatically
     const { skip, limit } = calculateSkipLimit(params.skip, params.limit, maxResponseCount);
-    const schemaKeys = Object.keys(Company.schema.paths);
     const sortBy = params.sortBy || 'name';
     const sortOrder = params.sortOrder || 'ascending';
 
-    const entries = new Map();
-
-    for (const [key, value] of Object.entries(params)) {
-        if (schemaKeys.includes(key)) {
-            entries.set(key, value);
-        }
-    }
-
-    const queryObject = Object.fromEntries(entries) || {};
+    //To add new filter just Add entry in validator scheme to let it pass a param and all will be done automatically by this func
+    const queryObject = createQueryObject(Company, params);
 
     //Keyword search
     //To add add field to keyword search:
     if (!!params.keyword) {
-        const regex = new RegExp(params.keyword,'i');
-        const toSearch = [
-            //Add here fields with String type like below:
-            //{>fieldName<: regex},
-            {name: regex },
-            {description: regex},
-            {administrators: regex}
-        ]
+        //Add here field names with type String
+        const stringFieldsArr = [
+            'name',
+            'description',
+            'administrators'
+        ];
 
-        if(!isNaN(params.keyword)) {
-            const kwrdInt = parseInt(params.keyword);
-            //Push here new object to toSearch array like below
-            //toSearch.push({>fieldName<: kwrdInt});
-            toSearch.push({orgNumber: kwrdInt});
-        }
+        //Add here field names with type Number
+        const numberFieldsArr = [
+            'orgNumber'
+        ];
 
-        queryObject.$or = toSearch 
+        queryObject.$or = createKeywordSearchArray(stringFieldsArr, numberFieldsArr, params.keyword);
     }
 
     try {
