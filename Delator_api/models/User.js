@@ -28,7 +28,7 @@ const userSchema = Schema({
         type: Number,
         required: true
     }, //% 0-1
-    logo: {
+    photo: {
         type: String
     },
     createDate: {

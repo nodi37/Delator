@@ -1,37 +1,28 @@
 const { maxResponseCount } = require('../config/userRequestConfig');
 const { calculateSkipLimit } = require('../helpers/skipLimitCalculator');
+const { createQueryObject, createKeywordSearchArray } = require('../helpers/queryObjectCreators');
+const User = require('../models/User');
+
 
 const saveNewUser = async (body) => {
-    const query = createInsertQueryString(body, table, true);
     try {
-        const added = await pool.query(query);
-        return added;
+        const response = await new User(body).save();
+        return response;
     } catch (error) {
-        const toThrow = new Error('Query rejected with error code: ' + error.code);
-        toThrow.code = error.code;
-        throw toThrow;
+        if(!error.code===11000) {
+            console.log(error);
+        }
+        const err = new Error('Duplicate key error!');
+        err.code = error.code;
+        throw err;
     }
 };
 
+
 const editExistingUser = async (body, id) => {
-    const condition = 'user_id = ' + id;
-    const query = createUpdateQueryString(body, condition, table, true);
     try {
-        const edited = await pool.query(query);
-        return edited;
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-
-const deleteSingleUser = async (id) => {
-    const condition = 'user_id = ' + id;
-    const query = createDeleteQueryString(condition, table, true);
-
-    try {
-        const deleted = await pool.query(query);
-        return deleted;
+        const response = await User.findByIdAndUpdate(id, body, { returnDocument: 'after' });
+        return response;
     } catch (error) {
         console.log(error);
     }
@@ -39,52 +30,62 @@ const deleteSingleUser = async (id) => {
 
 const replaceExistingUser = async (body, id) => {
     try {
-        const deleted = await deleteSingleUser(id);
-        if (deleted.rowCount > 0) {
-            const query = createInsertQueryString({ user_id: id, ...body }, table, true);
-            const added = await pool.query(query);
-            return added;
-        } else {
-            return deleted;
-        }
+        const response = await User.findOneAndReplace({ _id: id }, body);
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const deleteSingleUser = async (id) => {
+    try {
+        const response = await User.findByIdAndDelete(id)
+        return response;
     } catch (error) {
         console.log(error);
     }
 }
 
 const getOneUser = async (id) => {
-    const condition = 'user_id = ' + id;
-    const query = createSelectQueryString('all', table, condition);
     try {
-        const found = await pool.query(query);
-        return found;
+        const response = await User.findById(id)
+        return response;
     } catch (error) {
         console.log(error);
     }
 }
 
 const getManyUsers = async (params) => {
+    const { skip, limit } = calculateSkipLimit(params.skip, params.limit, maxResponseCount);
+    const sortBy = params.sortBy || 'name';
+    const sortOrder = params.sortOrder || 'ascending';
 
-    //sortOrder 0/1
-    //sortBy - column name
+    // POMYŚLEĆ O STOROWANIU KIEDY JEST TABLICA W ŚRODKU
 
-    const phoneNumberCondition = !isNaN(params.keyword)?`OR phone_number = ${params.keyword}`:'';
+    //To add new filter just Add entry in validator scheme to let it pass a param and all will be done automatically by this func
+    const queryObject = createQueryObject(User, params);
 
-    const condition = !!params.keyword ? 
-        `first_name ILIKE '%${params.keyword}%' OR 
-         last_name ILIKE '%${params.keyword}%' OR 
-         email ILIKE '%${params.keyword}%' 
-         ${phoneNumberCondition}` 
-        : null;
+    //Keyword search
+    //To add add field to keyword search:
+    if (!!params.keyword) {
+        //Add here field names with type String
+        const stringFieldsArr = [
+            'name',
+            'lastName',
+            'email'
+        ];
 
-    const sortOrder = parseInt(params.sortOrder)?'DESC':'ASC';
-    const sortBy = !!params.sortBy? `${params.sortBy} ${sortOrder}`:null;
-    const {skip, limit} = calculateSkipLimit(params.skip, params.limit, maxResponseCount);
-    const query = createSelectQueryString('all', table, condition, sortBy, limit, skip);
+        //Add here field names with type Number
+        const numberFieldsArr = [
+            'phoneNumber'
+        ];
+
+        queryObject.$or = createKeywordSearchArray(stringFieldsArr, numberFieldsArr, params.keyword);
+    }
 
     try {
-        const found = await pool.query(query);
-        return found;
+        const response = await User.find(queryObject).sort([[sortBy, sortOrder]]).skip(skip).limit(limit);
+        return response;
     } catch (error) {
         console.log(error);
     }
