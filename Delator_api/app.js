@@ -48,14 +48,8 @@ const companyRoutes = require('./routes/company.routes');
 app.use('/v1/company', companyRoutes);
 
 
-
-
-
-
-
-
-
-
+const raportRoutes = require('./routes/raport.routes');
+app.use('/v1/raport', raportRoutes);
 
 
 

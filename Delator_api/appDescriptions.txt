@@ -12,165 +12,51 @@
 0 - Daily overtime
 1 - Weelky overtime
 
-//Overtimy
+//Overtimes 
 0 - 0%
 0.12 - 12%
 1 - 100%
 
+//Creating filters:
+
+For keyword searching:
+    1. Add entry "keyword" in yup validator.
+    2. Define filters definitions in Model
+    3. Add fields names to arrays. If you want to pass a keyword to field which has number type use 'keywordNumberType' otherwise use 'keywordStringType'.
+        Accepts nested paths too 
+        example:
+
+        Model.filtersDef = {
+            keywordStringType: [
+                'fieldName'
+            ],
+            keywordNumberType: [
+                'fieldName'
+                'fieldName.nestedFieldName'
+            ]
+        }
+
+    This is for example if You want to search for keyword in for example name and phone number which has String and Number types. 
+    Incoming value will be converted to number if its possible and then passed to mongoose find func. 
+    Its required because mongoDB not let to search in fields with number type using strings, value needs to be converted.
+
+
+For other values: 
+    1. Add entry in Yup Validator to let value pass in and it will be done automatically if its simple value, like number or string. If you want to look for phrase or regexp use keyword query.
+    2. If You need to use nested path you can add it to Model.filtersDef like so:
+
+    Model.filtersDef = {
+        >employeeOf: 'employeeOf.companyId',<
+        keywordStringType: [
+            'smth'
+        ],
+        keywordNumberType: [
+            'smth'
+        ]
+    }
+
+    Now if You pass employeeOf as queryParameter, mongoose will look for it in employeeOf.companyId
+
+
 
 //ToDo
-Switch to mongoDB
-Match request validators and tables properties
-
-company = {
-    id: string,
-    name: string,
-    administrators: [
-        id: number,
-        id: number
-    ],
-    defHourlyRate: number
-    defTotalBreakTime: number,
-    settlementMethod: number,
-    stdHrsPerDay: number,
-    overtimeAllowance: numer, //% 0-1
-    freeDaysAllowance: number, //% 0-1
-    pricingPlan: number,
-    logo: Base64 - string - compressed (SHARP)
-}
-
-user = {
-    first_name: string,
-    last_name: string,
-    companies: [
-        {
-            id: number,
-            hourlyRate: number,
-            defTotalBreakTime: number,
-            settlementMethod: number,
-            stdHrsPerDay: number,
-            overtimeAllowance: numer, //% 0-1
-            freeDaysAllowance: number //% 0-1
-        },
-        {
-            id: number,
-            hourlyRate: number,            
-            defTotalBreakTime: number,
-            settlementMethod: number,
-            stdHrsPerDay: number,
-            overtimeAllowance: numer, //% 0-1
-            freeDaysAllowance: number //% 0-1
-        }
-    ],
-    email: string
-    password: string
-    phone_number: number
-    privlege_level: number
-    photo: Base64 - string - compressed
-});
-
-
-raport = {
-    user_id: number,
-    company_id: number,
-    date: date,
-    hours: [
-        {
-            from: date/time, 
-            to: date/time, 
-            hoursCalculated: number //Rodzielić dni przy nockach
-        },
-        {
-            from: date/time, 
-            to: date/time, 
-            hoursCalculated: number
-        }
-    ],
-    additional: [
-        {
-            value: number, 
-            name: string,
-            description: string,
-            photo: Base64 - string
-        },
-        {
-            value: number, 
-            name: string,
-            description: string,
-            photo: Base64 - string
-        }
-    ]
-    hoursCount: number,
-    hourWage: number,
-    additionalValue: number,
-    total: number
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-weekRaport = {
-    user_id: number,
-    company_id: number,
-    days: [
-        {
-            mon: {
-                hours: [
-                    {from: date/time, to: date/time , hoursCalculated: number},
-                    {from: date/time, to: date/time , hoursCalculated: number}
-                ],
-                additional: [
-                    {
-                        value: number, 
-                        name: string,
-                        description: string,
-                        photo: Base64 - string
-                    },
-                    {
-                        value: number, 
-                        name: string,
-                        description: string,
-                        photo: Base64 - string
-                    }
-                ]
-            }
-        },
-
-        tue: {
-
-        },
-
-        wed: {
-
-        },
-
-        thu: {
-
-        },
-
-        fri: {
-
-        }
-    ]
-}

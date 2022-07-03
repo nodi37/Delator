@@ -1,8 +1,45 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const raportSchema = Schema({
+const hoursSubDoc = new Schema({
+    from: {
+        type: Date,
+        required: true
+    },
+    to: {
+        type: Date,
+        required: true
+    },
+    hoursCalculated: {
+        type: Number,
+        required: true
+    }
+});
+
+const othersSubDoc = new Schema({
+    value: {
+        type: Number,
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String
+    },
+    photo: {
+        type: String
+    }
+});
+
+
+const raportSchema = new Schema({
     userId: {
+        type: String,
+        required: true,
+    },
+    companyId: {
         type: String,
         required: true,
     },
@@ -11,13 +48,9 @@ const raportSchema = Schema({
         default: Date.now(),
         required: true,
     },
-    hours: {
-        type: Array
-    },
-    additional: {
-        type: Array
-    },
-    hoursCount:{
+    hours: [hoursSubDoc],
+    additional: [othersSubDoc],
+    hoursCount: {
         type: Number
     },
     hourWage: {
@@ -29,7 +62,7 @@ const raportSchema = Schema({
     totalToPay: {
         type: Number
     },
-    accepted: {
+    closed: {
         type: Boolean,
         required: true,
         default: false
@@ -37,41 +70,21 @@ const raportSchema = Schema({
 });
 
 const Raport = mongoose.model("Raport", raportSchema);
-module.exports = Raport 
 
 
-// raport = {
-//     user_id: number,
-//     raport_id: number,
-//     date: date,
-//     hours: [
-//         {
-//             from: date/time, 
-//             to: date/time, 
-//             hoursCalculated: number //Rodzielić dni przy nockach
-//         },
-//         {
-//             from: date/time, 
-//             to: date/time, 
-//             hoursCalculated: number
-//         }
-//     ],
-//     additional: [
-//         {
-//             value: number, 
-//             name: string,
-//             description: string,
-//             photo: Base64 - string
-//         },
-//         {
-//             value: number, 
-//             name: string,
-//             description: string,
-//             photo: Base64 - string
-//         }
-//     ]
-//     hoursCount: number,
-//     hourWage: number,
-//     additionalValue: number,
-//     total: number
-// }
+//////////////////////
+//Define here search paths for filters
+
+Raport.filtersDef = {
+    //Filters definition here
+    keywordStringType: [
+        'additional'
+    ],
+    // keywordNumberType: [
+    //     'phoneNumber'
+    // ]
+}
+
+
+
+module.exports = Raport

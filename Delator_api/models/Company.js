@@ -17,7 +17,7 @@ const companySchema = Schema({
     administrators: {
         type: Array
     },
-    defHourlyRate:{
+    defHourlyRate: {
         type: Number
     },
     defTotalBreakTime: {
@@ -48,5 +48,20 @@ const companySchema = Schema({
 });
 
 const Company = mongoose.model("Company", companySchema);
+
+//////////////////////
+//Define here search paths for filters
+
+Company.filtersDef = {
+    administrators: 'administrators.id',
+    keywordStringType: [
+        'name',
+        'description',
+        'administrators'
+    ],
+    keywordNumberType: [
+        'orgNumber'
+    ]
+}
 
 module.exports = Company;

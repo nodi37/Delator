@@ -1,7 +1,43 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const userSchema = Schema({
+const employeeOfSubDoc = new Schema({
+    companyId: {
+        type: String,
+        required: true
+    },
+    hourlyRate: {
+        type: Number,
+        required: true
+    },
+    defTotalBreakTime: {
+        type: Number,
+        required: true
+    },
+    settlementMethod: {
+        type: Number,
+        required: true
+    },
+    stdHrsPerDay: {
+        type: Number,
+        required: true
+    },
+    overtimeAllowance: {
+        type: Number,
+        required: true
+    },
+    freeDaysAllowance: {
+        type: Number,
+        required: true
+    },
+    joinDate: {
+        type: Date,
+        default: Date.now(),
+        required: true
+    }
+});
+
+const userSchema = new Schema({
     name: {
         type: String,
         required: true,
@@ -9,9 +45,7 @@ const userSchema = Schema({
     lastName: {
         type: String,
     },
-    employeeOf:{
-        type: Array
-    },
+    employeeOf: [employeeOfSubDoc],
     email: {
         type: String,
         required: true,
@@ -39,16 +73,21 @@ const userSchema = Schema({
 
 const User = mongoose.model("User", userSchema);
 
-module.exports = User;
 
-//employeeOf:        
-//          {
-//             company_id: number,
-//             hourlyRate: number,
-//             defTotalBreakTime: number,
-//             settlementMethod: number,
-//             stdHrsPerDay: number,
-//             overtimeAllowance: numer, //% 0-1
-//             freeDaysAllowance: number //% 0-1
-//             joinDate: now()
-//         },
+
+//////////////////////
+//Define here search paths for filters
+
+User.filtersDef = {
+    employeeOf: 'employeeOf.companyId',
+    keywordStringType: [
+        'name',
+        'lastName',
+        'email'
+    ],
+    keywordNumberType: [
+        'phoneNumber'
+    ]
+}
+
+module.exports = User;

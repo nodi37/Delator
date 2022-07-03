@@ -1,8 +1,14 @@
 const yup = require('yup');
 
+//Part
+const adminSchema = yup.object({
+    id: yup.string().min(24).max(24).required()
+})
+
+
 module.exports.addCompanySchema = yup.object({
     name: yup.string().required(),
-    administrators: yup.array(),
+    administrators: yup.array().of(adminSchema),
     description: yup.string(),
     defHourlyRate: yup.number(),
     defTotalBreakTime: yup.number(),
@@ -16,7 +22,7 @@ module.exports.addCompanySchema = yup.object({
 
 module.exports.editCompanySchema = yup.object({
     name: yup.string(),
-    administrators: yup.array(),
+    administrators: yup.array().of(adminSchema),
     defHourlyRate: yup.number(),
     defTotalBreakTime: yup.number(),
     stdHrsPerDay: yup.number(),
@@ -30,9 +36,9 @@ module.exports.editCompanySchema = yup.object({
 module.exports.getManyCompaniesSchema = yup.object({
     skip: yup.number().positive().integer(),
     limit: yup.number().positive().integer(),
-    keyword: yup.string(),
+    //keyword: yup.string(),
     pricingPlan: yup.number().min(0).max(1),
-    //description: yup.string(), //<=Uncomment will unlock description filter, its example, add other fields to make them filters
+    administrators: yup.string().min(24).max(24),
     sortBy: yup.string(),
     sortOrder: yup.string().matches('descending','SortOrder accepts only >descending< keyword, use it to reverse sorting')
 });
