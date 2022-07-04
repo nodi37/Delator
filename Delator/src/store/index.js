@@ -1,15 +1,28 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import axios from 'axios';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    layout: "dashboard-layout",
-    menuItems: [
-      { title: 'dashboard', icon: 'mdi-view-dashboard', layout: 'dashboard-layout' },
-      { title: 'employees', icon: 'mdi-account-hard-hat', layout: 'employees-layout' },
-      { title: 'settings', icon: 'mdi-cog', layout: 'settings-layout' },
+    companies: [],
+    appSkip: 0, //TO SKIP LIMIT <-
+    appLimit: 10, //TO SKIP LIMIT <-
+    userToken: '', //Here will be user token
+    userTokenDecoded: { //here will be decoded
+      privlegeLevel: 0
+    },
+    adminMenuItems: [
+      { title: 'dashboard', icon: 'mdi-view-dashboard', pathName: 'dashboard' },
+      { title: 'companies', icon: 'mdi-domain', pathName: 'companies' },
+      { title: 'users', icon: 'mdi-account', pathName: 'users' },
+      { title: 'settings', icon: 'mdi-cog', pathName: 'settings' },
+    ],
+    ownerMenuItems: [
+      { title: 'dashboard', icon: 'mdi-view-dashboard', pathName: 'dashboard' },
+      { title: 'employees', icon: 'mdi-domain', pathName: 'employees' },
+      { title: 'settings', icon: 'mdi-cog', pathName: 'settings' },
     ],
     employeePositions: [
       'leader',
@@ -17,18 +30,38 @@ export default new Vuex.Store({
     ]
   },
   mutations: {
-    setLayout (state, value) {
-      state.layout = value
+    SET_COMPANIES(state, companies) {
+      state.companies = companies;
+    },
+    REMOVE_COMPANY(state, companyId) {
+      state.companies = state.companies.filter(val => val._id != companyId);
     }
   },
   actions: {
-    setLayout({ commit }, newLayout) {
-      commit('setLayout', newLayout)
+    async fetchCompanies({ commit }) {
+      axios.get('http://localhost:3001/v1/company')
+        .then(res => commit('SET_COMPANIES', res.data.data))
+        .catch(error => console.log(error));
+    },
+    
+    async deleteCompany({ commit }, companyId) {
+      axios.delete(`http://localhost:3001/v1/company/${companyId}`)
+        .then(res => commit('REMOVE_COMPANY', res.data.data._id))
+        .catch(error => console.log(error));
     }
   },
   getters: {
-    layout (state) {
-      return state.layout
+    companies: (state) => state.companies,
+    getCompanyById: (state) => (companyId) => state.companies.find(val => val._id === companyId),
+    menuItems(state) {
+      switch (state.userTokenDecoded.privlegeLevel) {
+        case 0:
+          return state.adminMenuItems;
+        case 1:
+          return state.ownerMenuItems;
+        default:
+          return null;
+      }
     }
   },
   modules: {

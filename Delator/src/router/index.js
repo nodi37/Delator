@@ -1,28 +1,61 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import DashboardLayout from '../layouts/DashboardLayout';
+import SettingsLayout from '../layouts/SettingsLayout';
+import CompaniesLayout from '../layouts/CompaniesLayout';
+import UsersLayout from '../layouts/UsersLayout';
 
 
 Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/',
+    name: 'landingPage',
+    component: () => import('../views/LandingPageView.vue')
+  },
+  {
+    path: '/',
+    name: 'login',
+    component: () => import('../views/LoginView.vue')
+  },
+  {
     path: '/app',
     name: 'app',
-    component: () => import('../views/AppView.vue')
-  },
-  // {
-  //   path: '/',
-  //   name: 'index',
-  //   component: IndexComponent
-  // },
-  // {
-  //   path: '/about',
-  //   name: 'about',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  // }
+    component: () => import('../views/AppView'),
+    children: [
+      {
+        path: 'dashboard',
+        name: 'dashboard',
+        component: DashboardLayout
+      },
+      {
+        path: 'companies',
+        name: 'companies',
+        component: CompaniesLayout
+      },
+      {
+        path: 'users',
+        name: 'allUsers',
+        component: UsersLayout
+      },
+      {
+        path: 'users/:companyId',
+        name: 'companyUsers',
+        component: UsersLayout
+      },      
+      {
+        path: 'company/:companyId',
+        name: 'companyEditor',
+        component: UsersLayout
+      },
+      {
+        path: 'settings',
+        name: 'settings',
+        component: SettingsLayout
+      }
+    ]
+  }
 ]
 
 const router = new VueRouter({

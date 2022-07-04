@@ -1,12 +1,11 @@
 {
     "dashboard": "Dashboard",
     "employees": "Employees",
+    "companies": "Companies",
+    "users": "Users",
     "settings": "Settings",
-    
-
     "employee": "Employee",
     "leader": "Leader",
-
     "add-employee": "Add employee",
     "name": "Name",
     "surname": "Surname",

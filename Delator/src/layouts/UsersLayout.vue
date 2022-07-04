@@ -1,18 +1,18 @@
 <script>
 export default {
-    name: 'DashboardLayout',
-    data: () => ({
-    }),
+    name: 'UsersLayout',
+    data: () => ({}),
     methods: {
     },
     computed: {
     },
     components: {
+
     }
 }
 </script>
 <template>
     <div>
-        <h1>Dashboard</h1>
+        <h1>Users</h1>
     </div>
 </template>

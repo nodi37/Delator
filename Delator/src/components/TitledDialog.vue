@@ -1,6 +1,6 @@
 <script>
 export default {
-    name: 'Dialog',
+    name: 'TitledDialog',
     props: {
         value: {
             type: Boolean
