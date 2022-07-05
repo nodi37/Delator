@@ -1,14 +1,11 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import axios from 'axios';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    companies: [],
-    appSkip: 0, //TO SKIP LIMIT <-
-    appLimit: 10, //TO SKIP LIMIT <-
+    menuSelectedItem: 0,
     userToken: '', //Here will be user token
     userTokenDecoded: { //here will be decoded
       privlegeLevel: 0
@@ -25,34 +22,21 @@ export default new Vuex.Store({
       { title: 'settings', icon: 'mdi-cog', pathName: 'settings' },
     ],
     employeePositions: [
-      'leader',
+      //'leader',
       'employee'
     ]
   },
   mutations: {
-    SET_COMPANIES(state, companies) {
-      state.companies = companies;
-    },
-    REMOVE_COMPANY(state, companyId) {
-      state.companies = state.companies.filter(val => val._id != companyId);
+    SET_MENU_ITEM(state, number) {
+      state.menuSelectedItem = number;
     }
   },
   actions: {
-    async fetchCompanies({ commit }) {
-      axios.get('http://localhost:3001/v1/company')
-        .then(res => commit('SET_COMPANIES', res.data.data))
-        .catch(error => console.log(error));
-    },
-    
-    async deleteCompany({ commit }, companyId) {
-      axios.delete(`http://localhost:3001/v1/company/${companyId}`)
-        .then(res => commit('REMOVE_COMPANY', res.data.data._id))
-        .catch(error => console.log(error));
+    setMenuItem({commit}, number) {
+      commit('SET_MENU_ITEM', number);
     }
   },
   getters: {
-    companies: (state) => state.companies,
-    getCompanyById: (state) => (companyId) => state.companies.find(val => val._id === companyId),
     menuItems(state) {
       switch (state.userTokenDecoded.privlegeLevel) {
         case 0:

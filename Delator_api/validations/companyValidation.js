@@ -36,7 +36,7 @@ module.exports.editCompanySchema = yup.object({
 module.exports.getManyCompaniesSchema = yup.object({
     skip: yup.number().positive().integer(),
     limit: yup.number().positive().integer(),
-    //keyword: yup.string(),
+    keyword: yup.string(),
     pricingPlan: yup.number().min(0).max(1),
     administrators: yup.string().min(24).max(24),
     sortBy: yup.string(),

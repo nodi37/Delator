@@ -1,14 +1,22 @@
 <script>
+import store from '@/store';
 export default {
   name: 'AppView',
   data: () => ({
-    drawer: false,
-    selectedItem: 0
+    drawer: false
   }),
   methods: {
 
   },
   computed: {
+    selectedItem: {
+      get() {
+        return store.state.menuSelectedItem;
+      },
+      set() {
+        store.dispatch('setMenuItem', 0);
+      }
+    },
     menuItems() {
       return this.$store.getters.menuItems
     }
@@ -41,7 +49,8 @@ export default {
 
       <v-list dense>
         <v-list-item-group color="primary" v-model="selectedItem">
-          <v-list-item v-for="(item, index) in menuItems" :key="index" @click="$router.push({ name: item.pathName })" :disabled="index===selectedItem">
+          <v-list-item v-for="(item, index) in menuItems" :key="index" @click="$router.push({ name: item.pathName })"
+            :disabled="index === selectedItem">
             <v-list-item-icon>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
@@ -62,9 +71,8 @@ export default {
         <router-view></router-view>
       </div>
     </v-main>
-    
+
   </v-app>
 </template>
 <style>
-
 </style>

@@ -1,4 +1,5 @@
 <script>
+import store from '@/store';
 export default {
     name: 'DashboardLayout',
     data: () => ({
@@ -8,6 +9,9 @@ export default {
     computed: {
     },
     components: {
+    },
+    mounted: function() {
+        store.dispatch('setMenuItem', 0);
     }
 }
 </script>

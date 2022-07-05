@@ -1,4 +1,4 @@
-const maxResponseCount = 20;
+const maxResponseCount = 10;
 
 module.exports = {
     maxResponseCount
