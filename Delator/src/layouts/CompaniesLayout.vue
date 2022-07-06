@@ -6,6 +6,7 @@ import ConfirmDialog from '@/components/ConfirmDialog';
 import TitledDialog from '@/components/TitledDialog';
 import SearchBar from '@/components/UI/SearchBar';
 import AddComapnyForm from '@/components/AddCompanyForm';
+import LoadMoreIndicator from '@/components/UI/LoadMoreIndicator.vue';
 import NothingMoreBar from '@/components/UI/NothingMoreBar.vue';
 import LoadingBar from '@/components/UI/LoadingBar.vue';
 
@@ -18,7 +19,7 @@ export default {
         dialogVisible: false,
         addCompanyDialog: false,
         nothingMore: false,
-        isLoading: true
+        isLoading: false
     }),
     methods: {
         onScroll({ target: { scrollTop, clientHeight, scrollHeight } }) {
@@ -31,7 +32,7 @@ export default {
             this.companies = [...this.companies, data]
         },
         async fetchCompanies() {
-            if (!this.nothingMore) {
+            if (!this.nothingMore && !this.isLoading) {
                 this.isLoading = true;
                 const skipQuery = this.skip ? `skip=${this.skip}` : '';
                 const keywordQuery = !!this.searchKeyword ? `&keyword=${this.searchKeyword}` : '';
@@ -81,7 +82,8 @@ export default {
         SearchBar,
         AddComapnyForm,
         NothingMoreBar,
-        LoadingBar
+        LoadingBar,
+        LoadMoreIndicator
     },
     mounted: function () {
         this.fetchCompanies();
@@ -91,20 +93,29 @@ export default {
 
 </script>
 <template>
-    <div>
-        <v-row class="mb-4">
+    <div class="no-scroll-container pa-4">
+
+        <v-row class="mb-2">
             <v-col cols="10">
                 <SearchBar v-model="searchKeyword" />
             </v-col>
             <v-col cols="2">
                 <v-btn @click="addCompanyDialog = !addCompanyDialog" heihght="100%" block
-                    color="pink darken-1 white--text">{{ $t('add') }}</v-btn>
+                    color="pink darken-1 white--text">
+                    {{ $t('add') }}</v-btn>
             </v-col>
         </v-row>
-        <div class="scroll-container pa-2" @scroll="onScroll">
-            <TitleDescAvatarCard v-for="company in companies" :key="company._id" :title="company.name"
-                :description="company.description" :imgSrc="company.logo" class="mb-2">
 
+        <div class="scroll-container pa-4" @scroll="onScroll">
+
+            <TitleDescAvatarCard 
+                v-for="company in companies" 
+                :key="company._id" 
+                :title="company.name"
+                :description="company.description" 
+                :imgSrc="company.logo" 
+                class="mb-2">
+                
                 <template v-slot:actions>
                     <v-btn color="secondary"
                         @click="$router.push({ name: 'companyUsers', params: { companyId: company._id } })">
@@ -120,18 +131,17 @@ export default {
                 </template>
 
             </TitleDescAvatarCard>
+            <LoadMoreIndicator v-if="!isLoading && !nothingMore"/>  
             <LoadingBar v-if="isLoading" />
             <NothingMoreBar v-if="nothingMore" />
+
         </div>
+
         <ConfirmDialog ref="confirm" />
         <TitledDialog v-model="addCompanyDialog" title="add-company">
             <AddComapnyForm v-on:addedCompany="addedCompany"></AddComapnyForm>
         </TitledDialog>
+
     </div>
+
 </template> 
-<style>
-.scroll-container {
-    max-height: 80vh;
-    overflow: scroll;
-}
-</style>

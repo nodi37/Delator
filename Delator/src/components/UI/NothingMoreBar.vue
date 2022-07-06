@@ -5,7 +5,7 @@ export default {
 </script>
 
 <template>
-    <v-row class="ma-6" align="center">
+    <v-row class="mt-6 mb-12" align="center" transition="scale-transition">
         <v-col>
             <v-divider></v-divider>
         </v-col>

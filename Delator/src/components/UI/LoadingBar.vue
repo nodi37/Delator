@@ -1,12 +1,13 @@
 <script>
 export default {
-    name: 'LoadingBar'
+  name: 'LoadingBar'
 }
 </script>
 
 <template>
           <v-progress-linear
-            class="my-8"
+            transition="scale-transition"
+            class="my-16"
             color="primary"
             indeterminate
             rounded

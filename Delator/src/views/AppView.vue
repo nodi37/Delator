@@ -67,12 +67,23 @@ export default {
     </v-app-bar>
 
     <v-main>
-      <div class="pa-6">
-        <router-view></router-view>
-      </div>
+      <router-view></router-view>
     </v-main>
-
   </v-app>
 </template>
+
 <style>
+.v-main {
+  max-height: 100%;
+  height: 100%
+}
+.no-scroll-container {
+    max-height: 100%;
+    height: 100%;
+}
+.scroll-container {
+    max-height: 100%;
+    overflow: scroll;
+}
 </style>
+
