@@ -34,7 +34,7 @@ const { handleJsonError } = require('./middlewares/JSONValidator');
 
 app.set('trust proxy', true);
 app.use(cors(corsConfig));
-app.use(express.json());
+app.use(express.json({limit: '30mb'}));
 app.use(handleJsonError);
 
 

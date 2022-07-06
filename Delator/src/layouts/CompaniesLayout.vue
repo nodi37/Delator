@@ -26,6 +26,10 @@ export default {
                 this.fetchCompanies();
             }
         },
+        addedCompany(data) {
+            this.addCompanyDialog = false;
+            this.companies = [...this.companies, data]
+        },
         async fetchCompanies() {
             if (!this.nothingMore) {
                 this.isLoading = true;
@@ -58,7 +62,7 @@ export default {
                     .then(res => {
                         this.companies = this.companies.filter(val => val._id != companyId);
                     })
-                    .catch(error => console.log(error));
+                    .catch(error => alert($t('error')));
             }
         }
     },
@@ -121,7 +125,7 @@ export default {
         </div>
         <ConfirmDialog ref="confirm" />
         <TitledDialog v-model="addCompanyDialog" title="add-company">
-            <AddComapnyForm></AddComapnyForm>
+            <AddComapnyForm v-on:addedCompany="addedCompany"></AddComapnyForm>
         </TitledDialog>
     </div>
 </template> 

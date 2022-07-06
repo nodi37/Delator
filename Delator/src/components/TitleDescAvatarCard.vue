@@ -13,7 +13,7 @@ export default {
                 </v-list-item-title>
                 <v-list-item-subtitle>{{ description }}</v-list-item-subtitle>
             </v-list-item-content>
-            <v-list-item-avatar size="80" rounded>
+            <v-list-item-avatar class="card-avatar" size="80" rounded>
                 <img v-if="imgSrc" :src="imgSrc" :alt="title">
                 <span v-else>{{ title }}</span>
             </v-list-item-avatar>
@@ -24,3 +24,8 @@ export default {
         </v-card-actions>
     </v-card>
 </template>
+<style>
+.card-avatar {
+    object-fit: cover;
+}
+</style>

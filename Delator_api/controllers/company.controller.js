@@ -74,7 +74,7 @@ module.exports.getMany = async (req, res) => {
         if (response.length>0) {
             res.status(201).json({ status: 200, statusText: "OK", data: response });
         } else {
-            res.status(404).json({ status: 404, statusText: "Resource not found" });
+            res.status(204).json({ status: 204, statusText: "No content" });
         }
     } catch (error) {
         console.log(error);

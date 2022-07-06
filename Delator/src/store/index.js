@@ -24,6 +24,10 @@ export default new Vuex.Store({
     employeePositions: [
       //'leader',
       'employee'
+    ],
+    pricingPlans: [
+      {no: 0, title: 'free'},
+      {no: 1, title: 'paid'}
     ]
   },
   mutations: {
