@@ -8,7 +8,7 @@ export default new Vuex.Store({
     menuSelectedItem: 0,
     userToken: '', //Here will be user token
     userTokenDecoded: { //here will be decoded
-      privlegeLevel: 0
+      privlegeLevel: 1
     },
     adminMenuItems: [
       { title: 'dashboard', icon: 'mdi-view-dashboard', pathName: 'dashboard' },
@@ -26,8 +26,12 @@ export default new Vuex.Store({
       'employee'
     ],
     pricingPlans: [
-      {no: 0, title: 'free'},
-      {no: 1, title: 'paid'}
+      {no: 1, title: 'free'},
+      {no: 2, title: 'paid'}
+    ],
+    settlementMethods: [
+      {no: 1, title: 'settlement-by-day'},
+      {no: 2, title: 'settlement-by-week'}
     ]
   },
   mutations: {
@@ -43,9 +47,9 @@ export default new Vuex.Store({
   getters: {
     menuItems(state) {
       switch (state.userTokenDecoded.privlegeLevel) {
-        case 0:
-          return state.adminMenuItems;
         case 1:
+          return state.adminMenuItems;
+        case 2:
           return state.ownerMenuItems;
         default:
           return null;

@@ -1,5 +1,6 @@
 const validateRequestBody = (schema) => async (req, res, next) => {
     try {
+        console.log(req.body)
         const striped = await schema.cast(req.body, { stripUnknown: true });
         await schema.validate(striped);
         req.body = striped;

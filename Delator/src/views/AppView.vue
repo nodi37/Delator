@@ -77,13 +77,20 @@ export default {
   max-height: 100%;
   height: 100%
 }
+
 .no-scroll-container {
-    max-height: 100%;
-    height: 100%;
+  max-height: 100%;
+  padding: 1rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
+
 .scroll-container {
-    max-height: 100%;
-    overflow: scroll;
+  padding: 1rem;
+  overflow: scroll;
+  padding-bottom: 2rem !important;
 }
 </style>
 

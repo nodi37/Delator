@@ -4,7 +4,7 @@ import DashboardLayout from '../layouts/DashboardLayout';
 import SettingsLayout from '../layouts/SettingsLayout';
 import CompaniesLayout from '../layouts/CompaniesLayout';
 import UsersLayout from '../layouts/UsersLayout';
-
+import CompanyProperties from '@/components/CompanyProperties';
 
 Vue.use(VueRouter)
 
@@ -47,7 +47,7 @@ const routes = [
       {
         path: 'company/:companyId',
         name: 'companyEditor',
-        component: UsersLayout
+        component: CompanyProperties
       },
       {
         path: 'settings',

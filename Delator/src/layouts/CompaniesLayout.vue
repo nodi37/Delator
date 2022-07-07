@@ -1,11 +1,11 @@
 <script>
 import axios from 'axios';
 import store from '@/store';
-import TitleDescAvatarCard from '@/components/TitleDescAvatarCard';
+import CompanyCard from '@/components/CompanyCard';
 import ConfirmDialog from '@/components/ConfirmDialog';
 import TitledDialog from '@/components/TitledDialog';
 import SearchBar from '@/components/UI/SearchBar';
-import AddComapnyForm from '@/components/AddCompanyForm';
+import AddCompanyForm from '@/components/Forms/AddCompanyForm.vue';
 import LoadMoreIndicator from '@/components/UI/LoadMoreIndicator.vue';
 import NothingMoreBar from '@/components/UI/NothingMoreBar.vue';
 import LoadingBar from '@/components/UI/LoadingBar.vue';
@@ -36,7 +36,7 @@ export default {
                 this.isLoading = true;
                 const skipQuery = this.skip ? `skip=${this.skip}` : '';
                 const keywordQuery = !!this.searchKeyword ? `&keyword=${this.searchKeyword}` : '';
-                axios.get(`http://localhost:3001/v1/company?${skipQuery}${keywordQuery}`)
+                axios.get( process.env.VUE_APP_API_PATH + `/company?${skipQuery}${keywordQuery}`)
                     .then(res => {
                         const arr = res.data.data;
                         this.nothingMore = arr.length < 10 ? true : false;
@@ -59,7 +59,7 @@ export default {
                 cancelBtnColor: 'primary'
             });
             if (ok) {
-                axios.delete(`http://localhost:3001/v1/company/${companyId}`)
+                axios.delete( process.env.VUE_APP_API_PATH + `/company/${companyId}`)
                     .then(res => {
                         this.companies = this.companies.filter(val => val._id != companyId);
                     })
@@ -76,11 +76,11 @@ export default {
         }
     },
     components: {
-        TitleDescAvatarCard,
+        CompanyCard,
         ConfirmDialog,
         TitledDialog,
         SearchBar,
-        AddComapnyForm,
+        AddCompanyForm,
         NothingMoreBar,
         LoadingBar,
         LoadMoreIndicator
@@ -94,28 +94,24 @@ export default {
 </script>
 <template>
     <div class="no-scroll-container pa-4">
-
-        <v-row class="mb-2">
-            <v-col cols="10">
-                <SearchBar v-model="searchKeyword" />
-            </v-col>
-            <v-col cols="2">
-                <v-btn @click="addCompanyDialog = !addCompanyDialog" heihght="100%" block
-                    color="pink darken-1 white--text">
-                    {{ $t('add') }}</v-btn>
-            </v-col>
-        </v-row>
+        <v-container fluid>
+            <v-row>
+                <v-col cols="10">
+                    <SearchBar v-model="searchKeyword" />
+                </v-col>
+                <v-col cols="2">
+                    <v-btn @click="addCompanyDialog = !addCompanyDialog" heihght="100%" block
+                        color="pink darken-1 white--text">
+                        {{ $t('add') }}</v-btn>
+                </v-col>
+            </v-row>
+        </v-container>
 
         <div class="scroll-container pa-4" @scroll="onScroll">
 
-            <TitleDescAvatarCard 
-                v-for="company in companies" 
-                :key="company._id" 
-                :title="company.name"
-                :description="company.description" 
-                :imgSrc="company.logo" 
-                class="mb-2">
-                
+            <CompanyCard v-for="company in companies" :key="company._id" :title="company.name"
+                :description="company.description" :imgSrc="company.logo" :createDate="company.createDate" class="mb-2">
+
                 <template v-slot:actions>
                     <v-btn color="secondary"
                         @click="$router.push({ name: 'companyUsers', params: { companyId: company._id } })">
@@ -130,8 +126,8 @@ export default {
                     </v-btn>
                 </template>
 
-            </TitleDescAvatarCard>
-            <LoadMoreIndicator v-if="!isLoading && !nothingMore"/>  
+            </CompanyCard>
+            <LoadMoreIndicator v-if="!isLoading && !nothingMore" />
             <LoadingBar v-if="isLoading" />
             <NothingMoreBar v-if="nothingMore" />
 
@@ -139,7 +135,7 @@ export default {
 
         <ConfirmDialog ref="confirm" />
         <TitledDialog v-model="addCompanyDialog" title="add-company">
-            <AddComapnyForm v-on:addedCompany="addedCompany"></AddComapnyForm>
+            <AddCompanyForm v-on:addedCompany="addedCompany" />
         </TitledDialog>
 
     </div>

@@ -9,27 +9,30 @@ const adminSchema = yup.object({
 module.exports.addCompanySchema = yup.object({
     name: yup.string().required(),
     administrators: yup.array().of(adminSchema),
+    orgNumber: yup.number().positive().integer(),
     description: yup.string(),
     defHourlyRate: yup.number(),
     defTotalBreakTime: yup.number(),
     stdHrsPerDay: yup.number(),
     overtimeAllowance: yup.number().positive().min(0).max(1),
     freeDaysAllowance: yup.number().positive().min(0).max(1),
-    settlementMethod: yup.number().positive().integer().min(0).max(1),
-    pricingPlan: yup.number().positive().integer().min(0).max(1).required(),
+    settlementMethod: yup.number().positive().integer().min(1).max(2),
+    pricingPlan: yup.number().positive().integer().min(1).max(1).required(),
     logo: yup.string(),
 });
 
 module.exports.editCompanySchema = yup.object({
     name: yup.string(),
     administrators: yup.array().of(adminSchema),
+    orgNumber: yup.number().positive().integer(),
+    description: yup.string(),
     defHourlyRate: yup.number(),
     defTotalBreakTime: yup.number(),
     stdHrsPerDay: yup.number(),
     overtimeAllowance: yup.number().positive().min(0).max(1),
     freeDaysAllowance: yup.number().positive().min(0).max(1),
-    settlementMethod: yup.number().positive().integer().min(0).max(1),
-    pricingPlan: yup.number().positive().integer().min(0).max(1),
+    settlementMethod: yup.number().positive().integer().min(1).max(2),
+    pricingPlan: yup.number().positive().integer().min(1).max(1),
     logo: yup.string(),
 });
 
