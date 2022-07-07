@@ -8,11 +8,9 @@ export default {
     props: ['value'],
     data: () => ({
         preloaded: false,
-        search: null,
+        search: '',
         administratorsData: [],
         administratorsIds: [],
-        overtimeAllowance: null,
-        freeDaysAllowance: null,
         administratorsLoading: false,
         rules: {
             required: value => !!value || 'This field is equired.',
@@ -71,7 +69,7 @@ export default {
             }
         },
         'model.formData.administrators': function (val) {
-            if (!this.preloaded) {
+            if (!this.preloaded && !!val) {
                 this.preloaded = true;
                 val.forEach((doc) => {
                     this.fetchSingleUser(doc.id);
@@ -148,12 +146,12 @@ export default {
 
         <v-text-field pattern="\d*" outlined dense :rules="[rules.percent]"
             @input="(val)=>model.formData.overtimeAllowance = val / 100"
-            :value="model.formData.overtimeAllowance ? model.formData.overtimeAllowance * 100 : null"
+            :value="model.formData.overtimeAllowance ? model.formData.overtimeAllowance * 100 : ''"
             :label="$t('overtime-allowance')" :disabled="model.inputsDisabled" />
 
         <v-text-field pattern="\d*" outlined dense :rules="[rules.percent]"
             @input="(val)=>model.formData.freeDaysAllowance = val / 100"
-            :value="model.formData.freeDaysAllowance ? model.formData.freeDaysAllowance * 100 : null"
+            :value="model.formData.freeDaysAllowance ? model.formData.freeDaysAllowance * 100 : ''"
             :label="$t('free-days-allowance')" :disabled="model.inputsDisabled" />
 
         <v-select outlined dense :rules="[rules.required]" :label="$t('pricing-plan')" :items="pricingPlans"

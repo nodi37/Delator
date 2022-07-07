@@ -109,7 +109,7 @@ export default {
 
         <div class="scroll-container pa-4" @scroll="onScroll">
 
-            <CompanyCard v-for="company in companies" :key="company._id" :title="company.name"
+            <CompanyCard v-for="company in companies" :key="company._id" :name="company.name"
                 :description="company.description" :imgSrc="company.logo" :createDate="company.createDate" class="mb-2">
 
                 <template v-slot:actions>

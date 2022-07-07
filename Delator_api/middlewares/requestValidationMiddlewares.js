@@ -1,12 +1,12 @@
 const validateRequestBody = (schema) => async (req, res, next) => {
     try {
-        console.log(req.body)
         const striped = await schema.cast(req.body, { stripUnknown: true });
         await schema.validate(striped);
         req.body = striped;
         return next();
     } catch (error) {
-        return res.status(400).json({ status: 400, statusText: "Bad request", errors: error.errors });
+        console.log(error);
+        return res.status(400).json({ status: 400, statusText: "Bad request", errors: error });
     }
 }
 
@@ -18,7 +18,8 @@ const validateRequestParams = (schema) => async (req, res, next) => {
         req.params = striped;
         return next();
     } catch (error) {
-        return res.status(400).json({ status: 400, statusText: "Bad request", errors: error.errors });
+        console.log(error);
+        return res.status(400).json({ status: 400, statusText: "Bad request", errors: error });
     }
 }
 
@@ -29,7 +30,8 @@ const validateRequestQuery = (schema) => async (req, res, next) => {
         req.query = striped;
         return next();
     } catch (error) {
-        return res.status(400).json({ status: 400, statusText: "Bad request", errors: error.errors });
+        console.log(error);
+        return res.status(400).json({ status: 400, statusText: "Bad request", errors: error });
     }
 }
 

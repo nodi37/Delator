@@ -12,15 +12,15 @@ export default {
             formData: {
                 name: '',
                 description: '',
-                orgNumber: null,
+                orgNumber: '',
                 administrators: [],
-                defHourlyRate: null,
-                defTotalBreakTime: null,
+                defHourlyRate: '',
+                defTotalBreakTime: '',
                 settlementMethod: null,
-                stdHrsPerDay: null,
-                overtimeAllowance: null,
-                freeDaysAllowance: null,
-                pricingPlan: null,
+                stdHrsPerDay: '',
+                overtimeAllowance: '',
+                freeDaysAllowance: '',
+                pricingPlan: '',
                 logo: ''
             }
         }

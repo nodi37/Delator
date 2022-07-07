@@ -3,8 +3,7 @@ const yup = require('yup');
 //Part
 const adminSchema = yup.object({
     id: yup.string().min(24).max(24).required()
-})
-
+});
 
 module.exports.addCompanySchema = yup.object({
     name: yup.string().required(),

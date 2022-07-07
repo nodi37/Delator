@@ -35,7 +35,7 @@ export default {
 
 <template>
     <div class="no-scroll-container">
-        <CompanyCard :title="cardDetails.name" :description="cardDetails.description" :imgSrc="cardDetails.logo"
+        <CompanyCard :name="cardDetails.name" :description="cardDetails.description" :imgSrc="cardDetails.logo"
             :createDate="cardDetails.createDate" />
         <div class="scroll-container">
 

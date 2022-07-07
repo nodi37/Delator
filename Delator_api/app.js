@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3001;
-const mongoose =  require("mongoose");
+const mongoose = require("mongoose");
 require('dotenv').config();
 const cors = require('cors');
 
@@ -30,12 +30,14 @@ const corsConfig = require('./config/corsConfig');
 
 //Middlewares
 const { handleJsonError } = require('./middlewares/JSONValidator');
+const { emptyFieldsFilter } = require('./middlewares/EmptyValuesFilter');
 
 
 app.set('trust proxy', true);
 app.use(cors(corsConfig));
-app.use(express.json({limit: '30mb'}));
+app.use(express.json({ limit: '30mb' }));
 app.use(handleJsonError);
+app.use(emptyFieldsFilter);
 
 
 //Routes
