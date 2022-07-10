@@ -1,34 +1,31 @@
 <script>
-import CompanyInputs from '@/components/Forms/Inputs/CompanyInputs';
+import UserInputs from '@/components/Forms/Inputs/UserInputs';
 import axios from 'axios';
 
 export default {
-    name: 'AddCompanyForm',
+    name: 'AddUserForm',
     data: () => ({
-        companyInputData: {
+        userInputData: {
             inputsDisabled: false,
             formData: {
                 name: '',
-                description: '',
-                orgNumber: '',
-                administrators: [],
-                defHourlyRate: '',
-                defTotalBreakTime: '',
-                settlementMethod: '',
-                stdHrsPerDay: '',
-                overtimeAllowance: '',
-                freeDaysAllowance: '',
-                pricingPlan: '',
-                logo: ''
+                lastName: '',
+                email: '',
+                employeeOf: [],
+                password: 'xxxxxxxxxxxxx',
+                phoneNumber: '',
+                privligeLvl: 2,
+                photo: ''
             }
         }
     }),
     methods: {
         submit() {
+            console.log(this.userInputData.formData)
             if (this.$refs.form.validate()) {
-                this.companyInputData.inputsDisabled = true;
-                axios.post(process.env.VUE_APP_API_PATH + '/company', this.companyInputData.formData)
-                    .then(res => this.$emit('addedCompany', res.data.data))
+                this.userInputData.inputsDisabled = true;
+                axios.post(process.env.VUE_APP_API_PATH + '/user', this.userInputData.formData)
+                    .then(res => this.$emit('addedUser', res.data.data))
                     .catch(err => {
                         console.log(err);
                         alert(this.$t('error-occured'));
@@ -37,11 +34,11 @@ export default {
             }
         },
         clearForm() {
-            this.companyInputData.formData = {};
+            this.userInputData.formData = {};
         }
     },
     components: {
-        CompanyInputs
+        UserInputs
     }
 }
 </script>
@@ -49,7 +46,7 @@ export default {
 <template>
     <v-form @submit.prevent="submit" ref="form">
 
-        <CompanyInputs v-model="companyInputData"/>
+        <UserInputs v-model="userInputData" />
 
         <div class="d-flex justify-end">
             <v-btn @click="clearForm" color="#BDBDBD" class="white--text mr-4">

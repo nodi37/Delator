@@ -13,7 +13,7 @@ export default new Vuex.Store({
     adminMenuItems: [
       { title: 'dashboard', icon: 'mdi-view-dashboard', pathName: 'dashboard' },
       { title: 'companies', icon: 'mdi-domain', pathName: 'companies' },
-      { title: 'users', icon: 'mdi-account', pathName: 'users' },
+      { title: 'users', icon: 'mdi-account', pathName: 'allUsers' },
       { title: 'settings', icon: 'mdi-cog', pathName: 'settings' },
     ],
     ownerMenuItems: [
@@ -21,17 +21,22 @@ export default new Vuex.Store({
       { title: 'employees', icon: 'mdi-domain', pathName: 'employees' },
       { title: 'settings', icon: 'mdi-cog', pathName: 'settings' },
     ],
+    privlegeLevels: [
+      { no: 1, title: 'administrator' },
+      { no: 2, title: 'company-owner' },
+      { no: 3, title: 'employee' },
+    ],
     employeePositions: [
       //'leader',
       'employee'
     ],
     pricingPlans: [
-      {no: 1, title: 'free'},
-      {no: 2, title: 'paid'}
+      { no: 1, title: 'free' },
+      { no: 2, title: 'paid' }
     ],
     settlementMethods: [
-      {no: 1, title: 'settlement-by-day'},
-      {no: 2, title: 'settlement-by-week'}
+      { no: 1, title: 'settlement-by-day' },
+      { no: 2, title: 'settlement-by-week' }
     ]
   },
   mutations: {
@@ -40,7 +45,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    setMenuItem({commit}, number) {
+    setMenuItem({ commit }, number) {
       commit('SET_MENU_ITEM', number);
     }
   },

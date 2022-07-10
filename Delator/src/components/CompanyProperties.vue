@@ -1,6 +1,6 @@
 <script>
 import axios from 'axios';
-import CompanyCard from '@/components/CompanyCard';
+import ItemCard from '@/components/ItemCard';
 import EditCompanyForm from './Forms/EditCompanyForm.vue';
 
 export default {
@@ -27,7 +27,7 @@ export default {
         this.loadCompanyData();
     },
     components: {
-        CompanyCard,
+        ItemCard,
         EditCompanyForm
     }
 }
@@ -35,7 +35,7 @@ export default {
 
 <template>
     <div class="no-scroll-container">
-        <CompanyCard :name="cardDetails.name" :description="cardDetails.description" :imgSrc="cardDetails.logo"
+        <ItemCard :name="cardDetails.name" :description="cardDetails.description" :imgSrc="cardDetails.logo"
             :createDate="cardDetails.createDate" />
         <div class="scroll-container">
 

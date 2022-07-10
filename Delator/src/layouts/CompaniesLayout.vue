@@ -1,7 +1,7 @@
 <script>
 import axios from 'axios';
 import store from '@/store';
-import CompanyCard from '@/components/CompanyCard';
+import ItemCard from '@/components/ItemCard';
 import ConfirmDialog from '@/components/ConfirmDialog';
 import TitledDialog from '@/components/TitledDialog';
 import SearchBar from '@/components/UI/SearchBar';
@@ -76,7 +76,7 @@ export default {
         }
     },
     components: {
-        CompanyCard,
+        ItemCard,
         ConfirmDialog,
         TitledDialog,
         SearchBar,
@@ -109,7 +109,7 @@ export default {
 
         <div class="scroll-container pa-4" @scroll="onScroll">
 
-            <CompanyCard v-for="company in companies" :key="company._id" :name="company.name"
+            <ItemCard v-for="company in companies" :key="company._id" :name="company.name"
                 :description="company.description" :imgSrc="company.logo" :createDate="company.createDate" class="mb-2">
 
                 <template v-slot:actions>
@@ -126,7 +126,7 @@ export default {
                     </v-btn>
                 </template>
 
-            </CompanyCard>
+            </ItemCard>
             <LoadMoreIndicator v-if="!isLoading && !nothingMore" />
             <LoadingBar v-if="isLoading" />
             <NothingMoreBar v-if="nothingMore" />

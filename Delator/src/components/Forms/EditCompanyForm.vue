@@ -16,7 +16,7 @@ export default {
                 administrators: [],
                 defHourlyRate: '',
                 defTotalBreakTime: '',
-                settlementMethod: null,
+                settlementMethod: '',
                 stdHrsPerDay: '',
                 overtimeAllowance: '',
                 freeDaysAllowance: '',

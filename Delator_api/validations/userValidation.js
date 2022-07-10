@@ -19,9 +19,9 @@ module.exports.addUserSchema = yup.object({
     lastName: yup.string(),
     employeeOf: yup.array().of(employeeOfObj),
     email: yup.string().email().required(),
-    password: yup.string().min(8).max(128).required(),
+    password: yup.string().min(8).max(128),
     phoneNmber: yup.number().positive().integer(),
-    privligeLvl: yup.number().positive().integer().min(1).max(2).required(),
+    privligeLvl: yup.number().positive().integer().min(1).max(3).required(),
     photo: yup.string(),
 });
 
@@ -32,7 +32,7 @@ module.exports.editUserSchema = yup.object({
     email: yup.string().email(),
     password: yup.string().min(8).max(128),
     phoneNmber: yup.number().positive().integer(),
-    privligeLvl: yup.number().positive().integer().min(1).max(2),
+    privligeLvl: yup.number().positive().integer().min(1).max(3),
     photo: yup.string(),
 });
 
