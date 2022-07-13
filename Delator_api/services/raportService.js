@@ -1,7 +1,7 @@
 const { maxResponseCount } = require('../config/RaportRequestConfig');
 const { calculateSkipLimit } = require('../helpers/skipLimitCalculator');
-const { createQueryObject, createKeywordSearchArray } = require('../helpers/queryObjectCreators');
-const Raport = require('../models/Raport');
+const { createQueryObject } = require('../helpers/queryObjectCreators');
+const Raport = require('../models/Report');
 
 
 const saveNewRaport = async (body) => {

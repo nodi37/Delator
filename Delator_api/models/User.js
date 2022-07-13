@@ -1,42 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const employeeOfSubDoc = new Schema({
-    companyId: {
-        type: String,
-        required: true
-    },
-    hourlyRate: {
-        type: Number,
-        required: true
-    },
-    defTotalBreakTime: {
-        type: Number,
-        required: true
-    },
-    settlementMethod: {
-        type: Number,
-        required: true
-    },
-    stdHrsPerDay: {
-        type: Number,
-        required: true
-    },
-    overtimeAllowance: {
-        type: Number,
-        required: true
-    },
-    freeDaysAllowance: {
-        type: Number,
-        required: true
-    },
-    joinDate: {
-        type: Date,
-        default: Date.now(),
-        required: true
-    }
-});
-
 const userSchema = new Schema({
     name: {
         type: String,
@@ -45,25 +9,33 @@ const userSchema = new Schema({
     lastName: {
         type: String,
     },
-    employeeOf: [employeeOfSubDoc],
     email: {
         type: String,
         required: true,
         unique: true
     },
-    password: {
-        type: String,
-        required: true
-    },
     phoneNumber: {
         type: Number
     },
-    privligeLvl: {
-        type: Number,
-        required: true
-    }, //% 0-1
     photo: {
         type: String
+    },
+
+    userType: {
+        type: String,
+        required: true,
+        default: 'user'
+    },
+
+    language: {
+        type: String,
+        default: 'no'
+    },
+
+    password: {
+        type: String,
+        default: 'xxxxxxx',
+        required: true
     },
     createDate: {
         type: Date,
@@ -71,15 +43,15 @@ const userSchema = new Schema({
     }
 });
 
-const User = mongoose.model("User", userSchema);
 
+const User = mongoose.model("User", userSchema);
 
 
 //////////////////////
 //Define here search paths for filters
 
 User.filtersDef = {
-    employeeOf: 'employeeOf.companyId',
+    //employeeOf: 'employeeOf.companyId',
     keywordStringType: [
         'name',
         'lastName',

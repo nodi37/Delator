@@ -45,9 +45,12 @@ app.use(emptyFieldsFilter);
 const userRoutes = require("./routes/user.routes");
 app.use('/v1/user', userRoutes);
 
-
 const companyRoutes = require('./routes/company.routes');
 app.use('/v1/company', companyRoutes);
+
+const contractRoutes = require('./routes/contract.routes');
+app.use('/v1/contract', contractRoutes);
+
 
 
 const raportRoutes = require('./routes/raport.routes');

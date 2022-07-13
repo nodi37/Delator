@@ -2,32 +2,46 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const companySchema = Schema({
-    name: {
-        type: String,
-        required: true,
+
+    pricingPlan: {
+        type: Number
     },
-    description: {
-        type: String
+    employessCount:{
+        type: Number //from API
     },
+    registeredEmployessCount:{
+        type: Number //Currently registered in App
+    },
+    createDate: {
+        type: Date,
+        default: Date.now()
+    },
+
     orgNumber: {
         type: Number,
         //required: true,
         //unique: true
     },
-    administrators: {
+    companyName: {
+        type: String,
+        required: true,
+    },
+    companyDescription: {
+        type: String
+    },
+    administratorsIds: {
         type: Array
     },
-    defHourlyRate: {
-        type: Number
+    logo: {
+        type: String
     },
-    defTotalBreakTime: {
+
+    //For user contracts
+    startingHourlyWage: {
         type: Number
     },
     settlementMethod: {
-        type: Number
-    },
-    stdHrsPerDay: {
-        type: Number
+        type: Number //daily/weekly/monthly overitme calculating
     },
     overtimeAllowance: {
         type: Number
@@ -35,15 +49,14 @@ const companySchema = Schema({
     freeDaysAllowance: {
         type: Number
     }, //% 0-1
-    pricingPlan: {
+
+
+    //For orders
+    hoursPerDayCount: {
         type: Number
     },
-    logo: {
-        type: String
-    },
-    createDate: {
-        type: Date,
-        default: Date.now()
+    breakTime: {
+        type: Number
     }
 });
 
@@ -53,11 +66,11 @@ const Company = mongoose.model("Company", companySchema);
 //Define here search paths for filters
 
 Company.filtersDef = {
-    administrators: 'administrators.id',
+    //administrators: 'administrators.id',
     keywordStringType: [
-        'name',
-        'description',
-        'administrators'
+        'companyName',
+        'companyDescription',
+        //'administratorsIds'
     ],
     keywordNumberType: [
         'orgNumber'

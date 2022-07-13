@@ -31,7 +31,7 @@ module.exports.editUserSchema = yup.object({
     employeeOf: yup.array().of(employeeOfObj),
     email: yup.string().email(),
     password: yup.string().min(8).max(128),
-    phoneNmber: yup.number().positive().integer(),
+    phoneNumber: yup.number().positive().integer(),
     privligeLvl: yup.number().positive().integer().min(1).max(3),
     photo: yup.string(),
 });

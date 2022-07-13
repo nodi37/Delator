@@ -1,6 +1,6 @@
 const { maxResponseCount } = require('../config/companyRequestConfig');
 const { calculateSkipLimit } = require('../helpers/skipLimitCalculator');
-const { createQueryObject, createKeywordSearchArray } = require('../helpers/queryObjectCreators');
+const { createQueryObject } = require('../helpers/queryObjectCreators');
 const Company = require('../models/Company');
 
 

@@ -1,19 +1,32 @@
-const { saveNewRaport, editExistingRaport, replaceExistingRaport, deleteSingleRaport, getOneRaport, getManyRaports } = require("../services/raportService");
+const {
+    saveNewContract,
+    editExistingContract,
+    replaceExistingContract,
+    deleteSingleContract,
+    getOneContract,
+    getManyContracts
+} = require("../services/contractService");
 
-
-module.exports.addRaport = async (req, res) => {
+module.exports.addContract = async (req, res) => {
     try {
-        const response = await saveNewRaport(req.body);
+        const response = await saveNewContract(req.body);
         res.status(201).json({ data: response });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: "Internal Server Error" });
+        if(error.code!=11000) {
+            console.log(error);
+        }
+        if (error.code === 11000) {
+            res.status(409).json({ error: "Conflict" });
+        } else {
+            res.status(500).json({ error: "Internal Server Error" });
+        }
     }
 }
 
-module.exports.editRaport = async (req, res) => {
+module.exports.editContract = async (req, res) => {
     try {
-        const response = await editExistingRaport(req.body, req.params.id);
+        const response = await editExistingContract(req.body, req.params.id);
+
         if (response) {
             res.status(201).json({ data: response });
         } else {
@@ -25,9 +38,9 @@ module.exports.editRaport = async (req, res) => {
     }
 }
 
-module.exports.updateRaport = async (req, res) => {
+module.exports.updateContract = async (req, res) => {
     try {
-        const response = await replaceExistingRaport(req.body, req.params.id);
+        const response = await replaceExistingContract(req.body, req.params.id);
         if (response) {
             res.status(201).json({ data: response });
         } else {
@@ -39,9 +52,9 @@ module.exports.updateRaport = async (req, res) => {
     }
 }
 
-module.exports.deleteRaport = async (req, res) => {
+module.exports.deleteContract = async (req, res) => {
     try {
-        const response = await deleteSingleRaport(req.params.id);
+        const response = await deleteSingleContract(req.params.id);
         if (response) {
             res.status(201).json({ data: response });
         } else {
@@ -52,11 +65,11 @@ module.exports.deleteRaport = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 }
-
 
 module.exports.getOne = async (req, res) => {
     try {
-        const response = await getOneRaport(req.params.id);
+        const response = await getOneContract(req.params.id);
+ 
         if (response) {
             res.status(201).json({ data: response });
         } else {
@@ -70,7 +83,8 @@ module.exports.getOne = async (req, res) => {
 
 module.exports.getMany = async (req, res) => {
     try {
-        const response = await getManyRaports(req.query);
+        const response = await getManyContracts(req.query);
+
         if (response.length>0) {
             res.status(201).json({ data: response });
         } else {

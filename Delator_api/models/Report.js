@@ -34,7 +34,11 @@ const othersSubDoc = new Schema({
 });
 
 
-const raportSchema = new Schema({
+const reportSchema = new Schema({
+    orderId: {
+        type: String,
+        required: true,
+    },
     userId: {
         type: String,
         required: true,
@@ -43,39 +47,46 @@ const raportSchema = new Schema({
         type: String,
         required: true,
     },
-    raportDate: {
+
+    reportForDate: {
+        type: Date,
+        required: true
+    },
+    reportCreationDate: {
         type: Date,
         default: Date.now(),
         required: true,
     },
-    hours: [hoursSubDoc],
-    additional: [othersSubDoc],
-    hoursCount: {
-        type: Number
+    reportModificationDate: {
+        type: Date,
     },
-    hourWage: {
-        type: Number
+
+
+    hoursLists: [hoursSubDoc],
+    othersList: [othersSubDoc],
+    isHoliday: {
+        type: Boolean
     },
-    additionalValue: {
-        type: Number
+
+    approvedByUser: {
+        type: Boolean
     },
-    totalToPay: {
-        type: Number
+    approvedByLeader: {
+        type: Boolean
     },
-    closed: {
-        type: Boolean,
-        required: true,
-        default: false
+    approvalDate: {
+        type: Date
     }
+
 });
 
-const Raport = mongoose.model("Raport", raportSchema);
+const report = mongoose.model("report", reportSchema);
 
 
 //////////////////////
 //Define here search paths for filters
 
-Raport.filtersDef = {
+report.filtersDef = {
     //Filters definition here
     keywordStringType: [
         'additional'
@@ -87,4 +98,4 @@ Raport.filtersDef = {
 
 
 
-module.exports = Raport
+module.exports = report;

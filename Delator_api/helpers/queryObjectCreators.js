@@ -53,7 +53,7 @@ const createQueryObject = (mongooseModel, paramsObj) => {
     //Loops throguh paramsObj === req.query
     for (const [key, value] of Object.entries(paramsObj)) {
         //If there is filter definition uses filter definition
-        if (filtersDef.hasOwnProperty(key)) {
+        if (filtersDef && filtersDef.hasOwnProperty(key)) {
             const keyDefinition = Object.getOwnPropertyDescriptor(filtersDef, key);
             entries.set(keyDefinition.value, value);
         //If there's not but Model includes field from paramsObj then adds it to query object. 
