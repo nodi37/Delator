@@ -47,3 +47,10 @@ Delator_api/*.ntvs*
 Delator_api/*.njsproj
 Delator_api/*.sln
 Delator_api/*.sw?
+
+db_plans.png
+appDescriptions.txt
+
+Delator_api/node_modules
+Delator_api/build
+Delator_api/src/node_modules
