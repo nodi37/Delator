@@ -1,12 +1,13 @@
 <script>
-import { computed } from 'vue'
-
 export default {
     name: 'ItemCard',
     props: ['name', 'description', 'imgSrc', 'createDate'],
-    computed: {
-        initials() {
-            return this.name.split(' ').map(word => word[0]).join('');
+    data:()=>({
+        initials: ''
+    }),
+    watch: {
+        name(val) {
+            this.initials = val.split(' ').map(word => word[0]).join('');
         }
     }
 }

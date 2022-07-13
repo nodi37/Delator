@@ -5,7 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    menuSelectedItem: 0,
+    menuSelectedItem: '',
     userToken: '', //Here will be user token
     userTokenDecoded: { //here will be decoded
       privlegeLevel: 1
@@ -21,15 +21,15 @@ export default new Vuex.Store({
       { title: 'employees', icon: 'mdi-domain', pathName: 'employees' },
       { title: 'settings', icon: 'mdi-cog', pathName: 'settings' },
     ],
-    privlegeLevels: [
-      { no: 1, title: 'administrator' },
-      { no: 2, title: 'company-owner' },
-      { no: 3, title: 'employee' },
-    ],
-    employeePositions: [
-      //'leader',
-      'employee'
-    ],
+    // privlegeLevels: [
+    //   { no: 1, title: 'administrator' },
+    //   { no: 2, title: 'company-owner' },
+    //   { no: 3, title: 'employee' },
+    // ],
+    // employeePositions: [
+    //   //'leader',
+    //   'employee'
+    // ],
     pricingPlans: [
       { no: 1, title: 'free' },
       { no: 2, title: 'paid' }
@@ -41,11 +41,13 @@ export default new Vuex.Store({
   },
   mutations: {
     SET_MENU_ITEM(state, number) {
+      console.log(number)
       state.menuSelectedItem = number;
     }
   },
   actions: {
     setMenuItem({ commit }, number) {
+      console.log(number)
       commit('SET_MENU_ITEM', number);
     }
   },

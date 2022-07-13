@@ -3,39 +3,41 @@ import UserInputs from '@/components/Forms/Inputs/UserInputs';
 import axios from 'axios';
 
 export default {
-    name: 'AddUserForm',
+    name: 'EditUserForm',
     data: () => ({
+        userId: '',
         userInputData: {
             inputsDisabled: false,
             formData: {
                 name: '',
                 lastName: '',
                 email: '',
-                employeeOf: [],
-                password: 'xxxxxxxxxxxxx',
                 phoneNumber: '',
-                privligeLvl: 2,
                 photo: ''
             }
         }
     }),
+    props: ['userData'],
     methods: {
         submit() {
-            console.log(this.userInputData.formData)
             if (this.$refs.form.validate()) {
                 this.userInputData.inputsDisabled = true;
-                axios.post(process.env.VUE_APP_API_PATH + '/user', this.userInputData.formData)
+                axios.patch(process.env.VUE_APP_API_PATH + '/user/' + this.userId, this.userInputData.formData)
                     .then(res => this.$emit('addedUser', res.data.data))
                     .catch(err => {
                         console.log(err);
                         alert(this.$t('error-occured'));
                     })
-                    .finally(() => this.inputsDisabled = false);
+                    .finally(() => this.userInputData.inputsDisabled = false);
             }
         },
         clearForm() {
             this.userInputData.formData = {};
         }
+    },
+    mounted() {
+        this.userId = this.userData._id;
+        this.userInputData.formData = this.userData;
     },
     components: {
         UserInputs
@@ -49,6 +51,9 @@ export default {
         <UserInputs v-model="userInputData" />
 
         <div class="d-flex justify-end">
+            <v-btn @click="$emit('cancel')" color="warning" class="white--text mr-4">
+                {{ $t('cancel') }}
+            </v-btn>
             <v-btn @click="clearForm" color="#BDBDBD" class="white--text mr-4">
                 {{ $t('clear') }}
             </v-btn>

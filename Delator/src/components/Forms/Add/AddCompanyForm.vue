@@ -3,46 +3,39 @@ import CompanyInputs from '@/components/Forms/Inputs/CompanyInputs';
 import axios from 'axios';
 
 export default {
-    name: 'EditCompanyForm',
+    name: 'AddCompanyForm',
     data: () => ({
-        companyId: null,
         companyInputData: {
             inputsDisabled: false,
-            currentAdministratorsIds: null,
             formData: {
-                name: '',
-                description: '',
+                pricingPlan: '',
+
                 orgNumber: '',
-                administrators: [],
-                defHourlyRate: '',
-                defTotalBreakTime: '',
+                companyName: '',
+                companyDescription: '',
+                administratorsIds: [],
+                logo: '',
+
+                startingHourlyWage: '',
                 settlementMethod: '',
-                stdHrsPerDay: '',
                 overtimeAllowance: '',
                 freeDaysAllowance: '',
-                pricingPlan: '',
-                logo: ''
+                hoursPerDayCount: '',
+                breakTime: ''
             }
         }
     }),
-    props: ['companyData'],
-    watch: {
-        companyData(val) {
-            this.companyId = val._id;
-            this.companyInputData.formData = val;
-        }
-    },
     methods: {
         submit() {
             if (this.$refs.form.validate()) {
                 this.companyInputData.inputsDisabled = true;
-                axios.patch(process.env.VUE_APP_API_PATH + `/company/${this.companyId}`, this.companyInputData.formData)
-                    .then(res => this.$emit('savedData', res.data.data))
+                axios.post(process.env.VUE_APP_API_PATH + '/company', this.companyInputData.formData)
+                    .then(res => this.$emit('addedCompany', res.data.data))
                     .catch(err => {
                         console.log(err);
                         alert(this.$t('error-occured'));
                     })
-                    .finally(() => this.companyInputData.inputsDisabled = false);
+                    .finally(() => this.inputsDisabled = false);
             }
         },
         clearForm() {

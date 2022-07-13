@@ -1,4 +1,4 @@
-# pasek_vue2
+# Delator
 
 ## Project setup
 ```

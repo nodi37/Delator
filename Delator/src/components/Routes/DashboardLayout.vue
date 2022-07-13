@@ -11,7 +11,6 @@ export default {
     components: {
     },
     mounted: function() {
-        store.dispatch('setMenuItem', 0);
     }
 }
 </script>

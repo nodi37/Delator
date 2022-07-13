@@ -1,7 +1,7 @@
 <script>
 import axios from 'axios';
-import ItemCard from '@/components/ItemCard';
-import EditCompanyForm from './Forms/EditCompanyForm.vue';
+import ItemCard from '@/components/UI/ItemCard';
+import EditCompanyForm from '@/components/Forms/Edit/EditCompanyForm.vue';
 
 export default {
     name: 'CompanyProperties',
@@ -35,12 +35,12 @@ export default {
 
 <template>
     <div class="no-scroll-container">
-        <ItemCard :name="cardDetails.name" :description="cardDetails.description" :imgSrc="cardDetails.logo"
+        <ItemCard :name="cardDetails.companyName" :description="cardDetails.companyDescription" :imgSrc="cardDetails.logo"
             :createDate="cardDetails.createDate" />
         <div class="scroll-container">
 
             <EditCompanyForm v-on:savedData="updateData" :companyData="companyData" />
-
+            
         </div>
     </div>
 </template>

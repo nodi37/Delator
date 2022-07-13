@@ -1,10 +1,12 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import DashboardLayout from '../layouts/DashboardLayout';
-import SettingsLayout from '../layouts/SettingsLayout';
-import CompaniesLayout from '../layouts/CompaniesLayout';
-import UsersLayout from '../layouts/UsersLayout';
-import CompanyProperties from '@/components/CompanyProperties';
+import DashboardLayout from '@/components/Routes/DashboardLayout';
+import SettingsLayout from '@/components/Routes/SettingsLayout';
+import CompaniesLayout from '@/components/Routes/CompaniesLayout';
+import UsersLayout from '@/components/Routes/UsersLayout';
+import CompanyProperties from '@/components/Routes/Subroutes/CompanyProperties';
+import UserProperties from '@/components/Routes/Subroutes/UserProperties';
+
 
 Vue.use(VueRouter)
 
@@ -48,6 +50,11 @@ const routes = [
         path: 'company/:companyId',
         name: 'companyEditor',
         component: CompanyProperties
+      },
+      {
+        path: 'user/:userId',
+        name: 'userEditor',
+        component: UserProperties
       },
       {
         path: 'settings',
