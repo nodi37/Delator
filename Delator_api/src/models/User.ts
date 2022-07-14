@@ -4,7 +4,6 @@ import IUser from '../interfaces/IUser';
 const userSchema = new mongoose.Schema<IUser>({
     name: {
         type: String,
-        required: true,
     },
     lastName: {
         type: String,
@@ -21,10 +20,10 @@ const userSchema = new mongoose.Schema<IUser>({
         type: String
     },
 
-    userType: {
-        type: String,
+    superUser: {
+        type: Boolean,
         required: true,
-        default: 'user'
+        default: false
     },
 
     language: {
@@ -34,7 +33,6 @@ const userSchema = new mongoose.Schema<IUser>({
 
     password: {
         type: String,
-        default: 'xxxxxxx',
         required: true
     },
     createDate: {

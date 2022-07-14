@@ -1,4 +1,5 @@
 import { maxResponseCount, filtersDefinition } from '../config/userRequestConfig';
+import { genRandomPasswordAsHash } from '../utils/password.utils';
 import { calculateSkipLimit } from '../helpers/skipLimitCalculator';
 import { createQueryObject } from '../helpers/queryObjectCreators';
 import User from '../models/User';
@@ -7,10 +8,13 @@ import IQueryError from '../interfaces/IQueryError';
 import IParams from '../interfaces/IParams';
 
 
-
-
 const saveNewUser = async (body: IDynamicObject) => {
     try {
+        const passwords = await genRandomPasswordAsHash();
+        body.password = passwords.passwordHash;
+
+        //Send email with passwords.passwordPlain
+
         const response = await new User(body).save();
         return response;
     } catch (error) {
@@ -64,11 +68,11 @@ const getOneUser = async (id: string) => {
 const getManyUsers = async (params: IParams) => {
     const { skip, limit } = calculateSkipLimit(Number(params.skip), Number(params.limit), maxResponseCount);
     const sortBy = params.sortBy || 'name';
-    const sortOrder = params.sortOrder === 'descending'? '-' : '';
+    const sortOrder = params.sortOrder === 'descending' ? '-' : '';
     const queryObject = createQueryObject(User, filtersDefinition, params);
 
     try {
-        const response = await User.find(queryObject).sort(sortOrder+sortBy).skip(skip).limit(limit);
+        const response = await User.find(queryObject).sort(sortOrder + sortBy).skip(skip).limit(limit);
         return response;
     } catch (error) {
         console.log(error);

@@ -1,11 +1,12 @@
 export default interface IUser {
-    name: String;
-    lastName: String;
-    email: String;
-    phoneNumber: Number;
-    photo: String;
-    userType: String;
-    language: String;
-    password: String;
+    _id: string;
+    name: string;
+    lastName: string;
+    email: string;
+    phoneNumber: number;
+    photo: string;
+    superUser: boolean;
+    language: string;
+    password: string;
     createDate: Date;
 }
