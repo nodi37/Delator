@@ -10,11 +10,11 @@ const jwtSecret = process.env.JWT_SECRET;
 
 const authCookieConfig = {
     //domain: '.kolo22energetyk.radom.pl',
-    expires: new Date (Date.now() + 2592000000),
+    //expires: new Date (Date.now() + 2592000000),
     signed: true,
     //secure: true,
     //httpOnly: true,
-    //sameSite: "Strict"
+    //sameSite: "None"
 }
 
 const tokenConfig = {

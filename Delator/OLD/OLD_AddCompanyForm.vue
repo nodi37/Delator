@@ -38,7 +38,7 @@ export default {
                     name: this.form.name,
                     pricingPlan: this.form.pricingPlan,
                     logo: this.form.logo
-                })
+                }, { withCredentials: true })
                     .then(res => this.$emit('addedCompany', res.data.data))
                     .catch(err => {
                         alert($t('error-occured'));

@@ -6,6 +6,8 @@ import User from '../models/User';
 import IDynamicObject from "../interfaces/IDynamicObject";
 import IQueryError from '../interfaces/IQueryError';
 import IParams from '../interfaces/IParams';
+import newPasswordTemplate from '../templates/emails/newPasswordTemplate';
+import sendEmail from '../utils/email.utils';
 
 
 const saveNewUser = async (body: IDynamicObject) => {
@@ -13,9 +15,12 @@ const saveNewUser = async (body: IDynamicObject) => {
         const passwords = await genRandomPasswordAsHash();
         body.password = passwords.passwordHash;
 
-        //Send email with passwords.passwordPlain
-
         const response = await new User(body).save();
+
+        const email = body.email as string;
+        const emailSubject = 'Your password in Delator has been created'
+        await sendEmail(newPasswordTemplate(passwords.passwordPlain), emailSubject, email);
+        
         return response;
     } catch (error) {
         const catchedError = error as IQueryError;

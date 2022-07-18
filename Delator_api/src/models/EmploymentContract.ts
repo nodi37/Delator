@@ -15,14 +15,6 @@ const employmentContractSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    companyName: {
-        type: String,
-        required: true,
-        ///////// TO DELETE AFTER ADDING AUTH
-        default: 'XXDDD'
-        /////////
-    },
-
 
     hourlyWage: {
         type: Number

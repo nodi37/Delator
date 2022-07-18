@@ -29,7 +29,6 @@ mongoose.connection.on('error', err => {
 
 
 //Configs
-//const corsConfig from './config/corsConfig');
 import corsConfig from './config/corsConfig';
 
 
@@ -54,14 +53,18 @@ app.use('/v1/user', userRoutes);
 import companyRoutes from './routes/company.routes';
 app.use('/v1/company', companyRoutes);
 
+import companySettings from './routes/company.settings.routes';
+app.use('/v1/company-settings', companySettings);
+
 import contractRoutes from './routes/contract.routes';
-app.use('/v1/contract', contractRoutes);
+app.use('/v1/employment-contract', contractRoutes);
 
 import reportRoutes from './routes/report.routes';
 app.use('/v1/report', reportRoutes);
 
 import authRoutes from './routes/auth.routes';
 app.use('/v1/auth', authRoutes);
+
 
 
 

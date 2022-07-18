@@ -36,7 +36,7 @@ export default {
                 this.isLoading = true;
                 const skipQuery = this.skip ? `skip=${this.skip}` : '';
                 const keywordQuery = !!this.searchKeyword ? `&keyword=${this.searchKeyword}` : '';
-                axios.get( process.env.VUE_APP_API_PATH + `/company?${skipQuery}${keywordQuery}`)
+                axios.get( process.env.VUE_APP_API_PATH + `/company?${skipQuery}${keywordQuery}`, { withCredentials: true })
                     .then(res => {
                         const arr = res.data.data;
                         this.nothingMore = arr.length < 10 ? true : false;

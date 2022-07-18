@@ -12,7 +12,7 @@ export default {
     }),
     methods: {
         loadCompanyData() {
-            axios.get(process.env.VUE_APP_API_PATH + `/company/${this.$route.params.companyId}`)
+            axios.get(process.env.VUE_APP_API_PATH + `/company/${this.$route.params.companyId}`, { withCredentials: true })
                 .then(res => {
                     this.companyData = res.data.data;
                     this.cardDetails = JSON.parse(JSON.stringify(res.data.data));

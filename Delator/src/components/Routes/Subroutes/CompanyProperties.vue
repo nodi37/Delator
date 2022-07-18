@@ -21,7 +21,7 @@ export default {
     }),
     methods: {
         loadCompanyData() {
-            axios.get(process.env.VUE_APP_API_PATH + `/company/${this.$route.params.companyId}`)
+            axios.get(process.env.VUE_APP_API_PATH + `/company/${this.$route.params.companyId}`, { withCredentials: true })
                 .then(res => {
                     this.companyData = res.data.data;
                     const { logo, orgNumber, companyName, companyDescription, startingHourlyWage, hoursPerDayCount, breakTime, freeDaysAllowance, overtimeAllowance, pricingPlan, settlementMethod } = res.data.data;

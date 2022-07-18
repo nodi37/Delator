@@ -6,7 +6,8 @@ import signByJwt from "../utils/jwt.utils";
 import { isPassRight, genRandomPasswordAsHash } from "../utils/password.utils";
 import { authCookieConfig } from '../config/authConfig';
 import { editExistingUser } from "../services/userService";
-
+import sendEmail from "../utils/email.utils";
+import newPasswordTemplate from "../templates/emails/newPasswordTemplate";
 
 const login = async (req: Request, res: Response) => {
     try {
@@ -16,7 +17,7 @@ const login = async (req: Request, res: Response) => {
             const authenticated = await isPassRight(password, userData.password);
             if (authenticated) {
                 const token = await signByJwt(userData);
-                res.status(200).cookie('access-token', token, authCookieConfig).json({ 'access-token': token });
+                res.status(200).cookie('access-token', token, authCookieConfig).json({ 'accessToken': token });
             } else {
                 res.status(401).json({ error: 'Wrong credentials' })
             }
@@ -30,6 +31,11 @@ const login = async (req: Request, res: Response) => {
     }
 }
 
+const logout = async (req: Request, res: Response) => {
+    console.log("Logout requested")
+    res.clearCookie('access-token').json({ success: true });
+}
+
 const resetPassword = async (req: Request, res: Response) => {
     try {
         const { email }: { email: string } = req.body;
@@ -37,12 +43,12 @@ const resetPassword = async (req: Request, res: Response) => {
 
         if (userData) {
             const passwords = await genRandomPasswordAsHash();
-            await editExistingUser({password: passwords.passwordHash}, userData._id);
+            await editExistingUser({ password: passwords.passwordHash }, userData._id);
 
-            //Send email with passwords.passwordPlain
-            console.log(passwords.passwordPlain)
+            const emailSubject = 'Your password in Delator has been reset'
+            await sendEmail(newPasswordTemplate(passwords.passwordPlain), emailSubject, email);
 
-            res.status(200).json({success: true});
+            res.status(200).json({ success: true });
         } else {
             res.status(404).json({ error: 'User not found' });
         }
@@ -55,5 +61,6 @@ const resetPassword = async (req: Request, res: Response) => {
 
 export {
     login,
+    logout,
     resetPassword
 }

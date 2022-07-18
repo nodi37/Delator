@@ -29,7 +29,7 @@ export default {
         submit() {
             if (this.$refs.form.validate()) {
                 this.companyInputData.inputsDisabled = true;
-                axios.post(process.env.VUE_APP_API_PATH + '/company', this.companyInputData.formData)
+                axios.post(process.env.VUE_APP_API_PATH + '/company', this.companyInputData.formData, { withCredentials: true })
                     .then(res => this.$emit('addedCompany', res.data.data))
                     .catch(err => {
                         console.log(err);

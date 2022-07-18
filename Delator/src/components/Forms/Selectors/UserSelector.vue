@@ -13,7 +13,7 @@ export default {
         fetchUsers(value) {
             this.usersLoading = true;
             const keyword = !!value ? `&keyword=${value}` : '';
-            axios.get(process.env.VUE_APP_API_PATH + `/user?limit=5${keyword}`)
+            axios.get(process.env.VUE_APP_API_PATH + `/user?limit=5${keyword}`, { withCredentials: true })
                 .then(res => {
                     res.data.data.forEach((doc) => {
                         if (!this.usersData.includes(doc)) {
@@ -25,7 +25,7 @@ export default {
         },
         fetchSingleUser(value) {
             this.usersLoading = true;
-            axios.get(process.env.VUE_APP_API_PATH + `/user?email=${value}`)
+            axios.get(process.env.VUE_APP_API_PATH + `/user?email=${value}`, { withCredentials: true })
                 .then(res => {
                     if (!this.usersData.includes(res.data.data)) {
                         this.usersData.push(res.data.data);

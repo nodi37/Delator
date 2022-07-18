@@ -30,7 +30,7 @@ export default {
         submit() {
             if (this.$refs.form.validate()) {
                 this.inputsDisabled = true;
-                axios.patch(process.env.VUE_APP_API_PATH + `/company/${this.companyId}`, this.formData)
+                axios.patch(process.env.VUE_APP_API_PATH + `/company/${this.companyId}`, this.formData, { withCredentials: true })
                     .then(res => this.$emit('edditedCompany', res.data.data))
                     .catch(err => {
                         console.log(err);

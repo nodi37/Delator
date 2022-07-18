@@ -6,7 +6,7 @@ const signByJwt = async (payload: IUser): Promise<string> => {
     const secret = jwtSecret as string;
     let token = "";
     try {
-        token = Jwt.sign({ payload }, secret, tokenConfig);
+        token = Jwt.sign({ _id: payload._id }, secret, tokenConfig);
     } catch (error) {
         console.log(error);
     }

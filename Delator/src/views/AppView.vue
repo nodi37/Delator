@@ -1,48 +1,38 @@
 <script>
 import store from '@/store';
+import NavigationDrawerList from '@/components/NavigationDrawerComponents/NavigationDrawerList.vue';
+import DrawerUserProfile from '@/components/NavigationDrawerComponents/DrawerUserProfile.vue';
+import LoadingBar from '@/components/UI/LoadingBar.vue';
+
 export default {
   name: 'AppView',
   data: () => ({
     drawer: false,
+    dataLoaded: false
   }),
-  computed: {
-    menuItems() {
-      return this.$store.getters.menuItems
-    }
+  components: {
+    NavigationDrawerList,
+    DrawerUserProfile,
+    LoadingBar
+},
+  async mounted() {
+    const userDataLoaded = await store.dispatch('loadUserData');
+    const companiesDataLoaded = await store.dispatch('loadCompaniesSettings');
+    const employmentContractsLoaded = await store.dispatch('loadEmploymentContracts');
+    this.dataLoaded = (userDataLoaded && companiesDataLoaded && employmentContractsLoaded);
   }
 }
 </script>
 <template>
-  <v-app>
+  <v-app v-if="dataLoaded">
 
     <v-navigation-drawer v-model="drawer" absolute temporary app>
 
-      <v-list-item>
-
-        <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
-          <!-- -----------DODAĆ AWATAR Z VUEX-->
-        </v-list-item-avatar>
-
-        <v-list-item-content>
-          <v-list-item-title>John Leider ------ DODAĆ IMIE </v-list-item-title>
-        </v-list-item-content>
-
-      </v-list-item>
+      <DrawerUserProfile />
 
       <v-divider></v-divider>
 
-
-      <v-list dense>
-        <v-list-item-group color="primary">
-          <v-list-item v-for="item in menuItems" :key="item.title" :to="{name: item.pathName}" >
-            <v-list-item-icon>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>{{ $t(item.title) }}</v-list-item-title>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
+      <NavigationDrawerList />
 
     </v-navigation-drawer>
 
@@ -55,6 +45,9 @@ export default {
       <router-view></router-view>
     </v-main>
   </v-app>
+  <v-card v-else>
+    <LoadingBar />
+  </v-card>
 </template>
 
 <style>

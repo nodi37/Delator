@@ -36,7 +36,7 @@ export default {
                 this.isLoading = true;
                 const skipQuery = this.skip ? `skip=${this.skip}` : '';
                 const keywordQuery = !!this.searchKeyword ? `&keyword=${this.searchKeyword}` : '';
-                axios.get( process.env.VUE_APP_API_PATH + `/user?${skipQuery}${keywordQuery}`)
+                axios.get( process.env.VUE_APP_API_PATH + `/user?${skipQuery}${keywordQuery}`, { withCredentials: true })
                     .then(res => {
                         const arr = res.data.data;
                         this.nothingMore = arr.length < 10 ? true : false;
@@ -59,7 +59,7 @@ export default {
                 cancelBtnColor: 'primary'
             });
             if (ok) {
-                axios.delete( process.env.VUE_APP_API_PATH + `/user/${userId}`)
+                axios.delete( process.env.VUE_APP_API_PATH + `/user/${userId}`, { withCredentials: true })
                     .then(res => {
                         this.users = this.users.filter(val => val._id != userId);
                     })

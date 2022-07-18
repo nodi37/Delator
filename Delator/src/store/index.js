@@ -1,3 +1,4 @@
+import axios from 'axios';
 import Vue from 'vue';
 import Vuex from 'vuex';
 
@@ -5,31 +6,10 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    menuSelectedItem: '',
-    userToken: '', //Here will be user token
-    userTokenDecoded: { //here will be decoded
-      privlegeLevel: 1
-    },
-    adminMenuItems: [
-      { title: 'dashboard', icon: 'mdi-view-dashboard', pathName: 'dashboard' },
-      { title: 'companies', icon: 'mdi-domain', pathName: 'companies' },
-      { title: 'users', icon: 'mdi-account', pathName: 'allUsers' },
-      { title: 'settings', icon: 'mdi-cog', pathName: 'settings' },
-    ],
-    ownerMenuItems: [
-      { title: 'dashboard', icon: 'mdi-view-dashboard', pathName: 'dashboard' },
-      { title: 'employees', icon: 'mdi-domain', pathName: 'employees' },
-      { title: 'settings', icon: 'mdi-cog', pathName: 'settings' },
-    ],
-    // privlegeLevels: [
-    //   { no: 1, title: 'administrator' },
-    //   { no: 2, title: 'company-owner' },
-    //   { no: 3, title: 'employee' },
-    // ],
-    // employeePositions: [
-    //   //'leader',
-    //   'employee'
-    // ],
+    userData: {},
+    companiesData: [],
+    companiesToManage: [],
+    employmentContracts: [],
     pricingPlans: [
       { no: 1, title: 'free' },
       { no: 2, title: 'paid' }
@@ -40,29 +20,118 @@ export default new Vuex.Store({
     ]
   },
   mutations: {
-    SET_MENU_ITEM(state, number) {
-      console.log(number)
-      state.menuSelectedItem = number;
+    APPLY_USER_TOKEN(state, token) {
+      state.userToken = token;
+    },
+    PUSH_TO_COMPANIES_DATA(state, data) {
+      state.companiesData.push(data);
+    },
+    SET_USER_ID(state, id) {
+      state.userId = id;
+    },
+    SET_USER_DATA(state, data) {
+      state.userData = data;
+    },
+    SET_COMPANIES_SETTINGS(state, data) {
+      state.companiesToManage = data;
+    },
+    SET_EMPLOYMENT_CONTRACTS(state, data) {
+      state.employmentContracts = data;
     }
   },
   actions: {
-    setMenuItem({ commit }, number) {
-      console.log(number)
-      commit('SET_MENU_ITEM', number);
-    }
-  },
-  getters: {
-    menuItems(state) {
-      switch (state.userTokenDecoded.privlegeLevel) {
-        case 1:
-          return state.adminMenuItems;
-        case 2:
-          return state.ownerMenuItems;
-        default:
-          return null;
-      }
-    }
-  },
-  modules: {
+    setUserToken({ commit }, token) {
+      commit('APPLY_USER_TOKEN', token);
+    },
+    setUserId({ commit }, id) {
+      commit('SET_USER_ID', id);
+    },
+    setUserData({ commit }, data) {
+      commit('SET_USER_DATA', data);
+    },
+
+
+    loadUserData({ commit }) {
+      return new Promise(async (resolve, reject) => {
+        const userId = localStorage.getItem('userId');
+        try {
+          const res = await axios.get(process.env.VUE_APP_API_PATH + `/user/${userId}`, { withCredentials: true });
+          commit('SET_USER_DATA', res.data.data);
+          resolve(true);
+        } catch (error) {
+          console.log(error);
+          reject(error);
+        }
+      });
+    },
+
+    loadCompanyData({ commit, state }, companyId) {
+      console.log('loadCompanyData')
+      return new Promise(async (resolve, reject) => {
+        const alreadyLoaded = state.companiesData.find(company => company._id === companyId);
+        if (!alreadyLoaded) {
+          try {
+            const res = await axios.get(process.env.VUE_APP_API_PATH + `/company/${companyId}`, { withCredentials: true });
+            const companyData = res.data.data;
+            commit('PUSH_TO_COMPANIES_DATA', companyData);
+            resolve(true);
+          } catch (error) {
+            console.log(error);
+            reject(error);
+          }
+        } else {
+          console.log('Already loaded')
+          resolve(true);
+        }
+      });
+    },
+
+    loadCompaniesSettings({ commit, dispatch }) {
+      console.log('loadCompaniesSettings')
+      return new Promise(async (resolve, reject) => {
+        try {
+          const userId = localStorage.getItem('userId');
+
+          const res = await axios.get(process.env.VUE_APP_API_PATH + `/company-settings?administratorsIds=${userId}`, { withCredentials: true });
+          const settingsArr = res.data.data;
+
+          commit('SET_COMPANIES_SETTINGS', settingsArr);
+
+          settingsArr.forEach(async settings => {
+            await dispatch('loadCompanyData', settings.companyId);
+          });
+
+          resolve(true);
+
+        } catch (error) {
+          console.log(error);
+          reject(error);
+        }
+      });
+
+    },
+
+    loadEmploymentContracts({ commit, dispatch }) {
+      console.log('loadEmploymentContracts')
+      return new Promise(async (resolve, reject) => {
+        try {
+          const userId = localStorage.getItem('userId');
+
+          const res = await axios.get(process.env.VUE_APP_API_PATH + `/employment-contract?userId=${userId}`, { withCredentials: true });
+          const contractsArr = res.data.data;
+
+          commit('SET_EMPLOYMENT_CONTRACTS', contractsArr);
+
+          contractsArr.forEach(async contract => {
+            await dispatch('loadCompanyData', contract.companyId);
+          });
+
+          resolve(true);
+        } catch (error) {
+          console.log(error);
+          reject(error);
+        }
+      });
+    },
   }
 })

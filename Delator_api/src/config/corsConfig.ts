@@ -1,5 +1,6 @@
 const corsConfig = { 
-    origin: '*' 
+    credentials: true,
+    origin: 'http://localhost:8080' 
 };
 
 export default corsConfig;

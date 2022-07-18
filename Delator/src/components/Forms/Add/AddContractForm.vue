@@ -21,7 +21,7 @@ export default {
             if (this.$refs.form.validate()) {
                 console.log(this.formData)
                 this.inputsDisabled = true;
-                axios.post(process.env.VUE_APP_API_PATH + '/contract', this.formData)
+                axios.post(process.env.VUE_APP_API_PATH + '/contract', this.formData, { withCredentials: true })
                     .then(res => this.$emit('addedContract', res.data.data))
                     .catch(err => {
                         console.log(err);

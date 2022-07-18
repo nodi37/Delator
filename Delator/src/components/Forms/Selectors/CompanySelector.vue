@@ -14,7 +14,7 @@ export default {
         fetchCompanies(value) {
             this.companiesLoading = true;
             const keyword = !!value ? `&keyword=${value}` : '';
-            axios.get(process.env.VUE_APP_API_PATH + `/company?limit=5${keyword}`)
+            axios.get(process.env.VUE_APP_API_PATH + `/company?limit=5${keyword}`, { withCredentials: true })
                 .then(res => {
                     res.data.data.forEach((doc) => {
                         if (!this.companiesData.includes(doc)) {
