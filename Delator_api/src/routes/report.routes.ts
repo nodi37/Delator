@@ -13,11 +13,11 @@ import * as reportController from '../controllers/report.controller';
 // router.get('/:id', validateRequestParams(idParamSchema), reportController.getOne);
 // router.get('/', validateRequestQuery(getManyReportsSchema), reportController.getMany);
 
-router.post('/', reportController.addReport);
-router.patch('/:id', reportController.editReport); //Updates partial
+router.post('/add', reportController.addReport);
+router.patch('/edit/:id', reportController.editReport); //Updates partial
 //router.put('/:id', reportController.updateReport); //Updates entire resource
-router.delete('/:id', reportController.deleteReport);
-router.get('/:id', reportController.getOne);
-router.get('/', reportController.getMany);
+router.delete('/delete/:id', reportController.deleteReport);
+router.get('/get/:id', reportController.getOne);
+router.get('/get-many', reportController.getMany);
 
 export default router;

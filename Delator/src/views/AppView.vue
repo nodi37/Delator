@@ -8,23 +8,30 @@ export default {
   name: 'AppView',
   data: () => ({
     drawer: false,
-    dataLoaded: false
+    isAppLoading: true,
+    isDataLoaded: false
   }),
   components: {
     NavigationDrawerList,
     DrawerUserProfile,
     LoadingBar
-},
+  },
   async mounted() {
-    const userDataLoaded = await store.dispatch('loadUserData');
-    const companiesDataLoaded = await store.dispatch('loadCompaniesSettings');
-    const employmentContractsLoaded = await store.dispatch('loadEmploymentContracts');
-    this.dataLoaded = (userDataLoaded && companiesDataLoaded && employmentContractsLoaded);
+    try {
+      await store.dispatch('loadCompaniesSettings');
+      await store.dispatch('loadEmploymentContracts');
+      this.isDataLoaded = true;
+    } catch (error) {
+      this.isDataLoaded = false;
+    } finally {
+      this.isAppLoading = false;
+    }
   }
 }
 </script>
 <template>
-  <v-app v-if="dataLoaded">
+
+  <v-app v-if="isDataLoaded">
 
     <v-navigation-drawer v-model="drawer" absolute temporary app>
 
@@ -45,9 +52,12 @@ export default {
       <router-view></router-view>
     </v-main>
   </v-app>
+
   <v-card v-else>
-    <LoadingBar />
+    <LoadingBar v-if="isAppLoading" />
+    <h1 v-else>Error</h1>
   </v-card>
+
 </template>
 
 <style>

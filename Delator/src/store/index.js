@@ -6,6 +6,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    userId: '',
     userData: {},
     companiesData: [],
     companiesToManage: [],
@@ -20,14 +21,11 @@ export default new Vuex.Store({
     ]
   },
   mutations: {
-    APPLY_USER_TOKEN(state, token) {
-      state.userToken = token;
+    SET_USER_ID(state, id) {
+      state.userId = id;
     },
     PUSH_TO_COMPANIES_DATA(state, data) {
       state.companiesData.push(data);
-    },
-    SET_USER_ID(state, id) {
-      state.userId = id;
     },
     SET_USER_DATA(state, data) {
       state.userData = data;
@@ -50,14 +48,12 @@ export default new Vuex.Store({
       commit('SET_USER_DATA', data);
     },
 
-
-    loadUserData({ commit }) {
+    loadUserData({ commit, state }) {
       return new Promise(async (resolve, reject) => {
-        const userId = localStorage.getItem('userId');
         try {
-          const res = await axios.get(process.env.VUE_APP_API_PATH + `/user/${userId}`, { withCredentials: true });
+          const res = await axios.get(process.env.VUE_APP_API_PATH + `/user/get/${state.userId}`, { withCredentials: true });
           commit('SET_USER_DATA', res.data.data);
-          resolve(true);
+          resolve(res.data.data);
         } catch (error) {
           console.log(error);
           reject(error);
@@ -74,25 +70,24 @@ export default new Vuex.Store({
             const res = await axios.get(process.env.VUE_APP_API_PATH + `/company/${companyId}`, { withCredentials: true });
             const companyData = res.data.data;
             commit('PUSH_TO_COMPANIES_DATA', companyData);
-            resolve(true);
+            resolve({success: true});
           } catch (error) {
             console.log(error);
             reject(error);
           }
         } else {
-          console.log('Already loaded')
-          resolve(true);
+          console.log('Company already loaded, skipping request')
+          resolve({success: true});
         }
       });
     },
 
-    loadCompaniesSettings({ commit, dispatch }) {
+    loadCompaniesSettings({ commit, dispatch, state }) {
       console.log('loadCompaniesSettings')
       return new Promise(async (resolve, reject) => {
         try {
-          const userId = localStorage.getItem('userId');
 
-          const res = await axios.get(process.env.VUE_APP_API_PATH + `/company-settings?administratorsIds=${userId}`, { withCredentials: true });
+          const res = await axios.get(process.env.VUE_APP_API_PATH + `/company-settings?administratorsIds=${state.userId}`, { withCredentials: true });
           const settingsArr = res.data.data;
 
           commit('SET_COMPANIES_SETTINGS', settingsArr);
@@ -101,7 +96,7 @@ export default new Vuex.Store({
             await dispatch('loadCompanyData', settings.companyId);
           });
 
-          resolve(true);
+          resolve({success: true});
 
         } catch (error) {
           console.log(error);
@@ -111,13 +106,12 @@ export default new Vuex.Store({
 
     },
 
-    loadEmploymentContracts({ commit, dispatch }) {
+    loadEmploymentContracts({ commit, dispatch, state }) {
       console.log('loadEmploymentContracts')
       return new Promise(async (resolve, reject) => {
         try {
-          const userId = localStorage.getItem('userId');
 
-          const res = await axios.get(process.env.VUE_APP_API_PATH + `/employment-contract?userId=${userId}`, { withCredentials: true });
+          const res = await axios.get(process.env.VUE_APP_API_PATH + `/employment-contract?userId=${state.userId}`, { withCredentials: true });
           const contractsArr = res.data.data;
 
           commit('SET_EMPLOYMENT_CONTRACTS', contractsArr);
@@ -126,7 +120,7 @@ export default new Vuex.Store({
             await dispatch('loadCompanyData', contract.companyId);
           });
 
-          resolve(true);
+          resolve({success: true});
         } catch (error) {
           console.log(error);
           reject(error);

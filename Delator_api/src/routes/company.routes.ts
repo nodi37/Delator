@@ -14,11 +14,11 @@ import * as companyController from '../controllers/company.controller';
 // router.get('/', validateRequestQuery(getManyCompaniesSchema), companyController.getMany);
 
 
-router.post('/', companyController.addCompany);
-router.patch('/:id', companyController.editCompany); //Updates partial
+router.post('/add', companyController.addCompany);
+router.patch('/edit/:id', companyController.editCompany); //Updates partial
 //router.put('/:id', companyController.updateCompany); //Updates entire resource
-router.delete('/:id', companyController.deleteCompany);
-router.get('/:id', companyController.getOne);
-router.get('/', companyController.getMany);
+router.delete('/delete/:id', companyController.deleteCompany);
+router.get('/get/:id', companyController.getOne);
+router.get('/get-many', companyController.getMany);
 
 export default router;

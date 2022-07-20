@@ -22,7 +22,7 @@ export default {
     }),
     methods: {
         loadUserData() {
-            axios.get(process.env.VUE_APP_API_PATH + `/user/${this.$route.params.userId}`, { withCredentials: true })
+            axios.get(process.env.VUE_APP_API_PATH + `/user/get/${this.$route.params.userId}`, { withCredentials: true })
                 .then(res => {
                     this.userData = res.data.data;
                     const { name, lastName, email, phoneNumber, photo } = res.data.data;

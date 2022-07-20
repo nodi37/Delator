@@ -22,7 +22,7 @@ export default {
         submit() {
             if (this.$refs.form.validate()) {
                 this.userInputData.inputsDisabled = true;
-                axios.patch(process.env.VUE_APP_API_PATH + '/user/' + this.userId, this.userInputData.formData, { withCredentials: true })
+                axios.patch(process.env.VUE_APP_API_PATH + '/user/update/' + this.userId, this.userInputData.formData, { withCredentials: true })
                     .then(res => this.$emit('addedUser', res.data.data))
                     .catch(err => {
                         console.log(err);

@@ -22,7 +22,7 @@ export default {
     methods: {
         loadAdminData(arr) {
             arr.forEach(admin => {
-                axios.get(process.env.VUE_APP_API_PATH + `/user/${admin.id}`, { withCredentials: true })
+                axios.get(process.env.VUE_APP_API_PATH + `/user/get/${admin.id}`, { withCredentials: true })
                     .then(res => this.administratorsData.push(res.data.data));
             });
         },

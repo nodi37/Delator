@@ -59,7 +59,7 @@ export default {
                 cancelBtnColor: 'primary'
             });
             if (ok) {
-                axios.delete( process.env.VUE_APP_API_PATH + `/user/${userId}`, { withCredentials: true })
+                axios.delete( process.env.VUE_APP_API_PATH + `/user/delete/${userId}`, { withCredentials: true })
                     .then(res => {
                         this.users = this.users.filter(val => val._id != userId);
                     })

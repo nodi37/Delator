@@ -13,11 +13,11 @@ import * as contractController from '../controllers/contract.controller';
 // router.get('/:id', validateRequestParams(idParamSchema), contractController.getOne);
 // router.get('/', validateRequestQuery(getManyContractsSchema), contractController.getMany);
 
-router.post('/', contractController.addContract);
-router.patch('/:id', contractController.editContract); //Updates partial
+router.post('/add', contractController.addContract);
+router.patch('/edit/:id', contractController.editContract); //Updates partial
 //router.put('/:id', contractController.updateContract); //Updates entire resource
-router.delete('/:id', contractController.deleteContract);
-router.get('/:id', contractController.getOne);
-router.get('/', contractController.getMany);
+router.delete('/delete/:id', contractController.deleteContract);
+router.get('/get/:id', contractController.getOne);
+router.get('/get-many', contractController.getMany);
 
 export default router;

@@ -6,9 +6,25 @@ import CompaniesLayout from '@/components/Routes/CompaniesLayout';
 import UsersLayout from '@/components/Routes/UsersLayout';
 import CompanyProperties from '@/components/Routes/Subroutes/CompanyProperties';
 import UserProperties from '@/components/Routes/Subroutes/UserProperties';
+import store from '@/store';
 
+Vue.use(VueRouter);
 
-Vue.use(VueRouter)
+async function appRouteGuard(_to, _, next) {
+  try {
+    const userId = localStorage.getItem('userId');
+    store.commit('SET_USER_ID', userId);
+    const userData = await store.dispatch('loadUserData');
+
+    if (!!userData) {
+      next();
+    }
+
+  } catch (error) {
+    localStorage.removeItem('userId');
+    router.push({ name: 'login' })
+  }
+}
 
 const routes = [
   {
@@ -25,6 +41,7 @@ const routes = [
     path: '/app',
     name: 'app',
     component: () => import('../views/AppView'),
+    beforeEnter: appRouteGuard,
     children: [
       {
         path: 'dashboard',
@@ -45,7 +62,7 @@ const routes = [
         path: 'users/:companyId',
         name: 'companyUsers',
         component: UsersLayout
-      },      
+      },
       {
         path: 'company/:companyId',
         name: 'companyEditor',
@@ -64,6 +81,9 @@ const routes = [
     ]
   }
 ]
+
+
+
 
 const router = new VueRouter({
   mode: 'history',
