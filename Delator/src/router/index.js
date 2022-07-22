@@ -10,10 +10,15 @@ import store from '@/store';
 
 Vue.use(VueRouter);
 
-async function appRouteGuard(_to, _, next) {
+async function appRouteGuard(_to, _from, next) {
   try {
-    const userId = localStorage.getItem('userId');
-    store.commit('SET_USER_ID', userId);
+    console.log('store.state: ', store.state.userId);
+    if(!store.state.userId) {
+      const userId = localStorage.getItem('userId');
+      console.log('localstoreage: ', userId);
+      store.commit('SET_USER_ID', userId);
+    }
+
     const userData = await store.dispatch('loadUserData');
 
     if (!!userData) {
