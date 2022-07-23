@@ -1,6 +1,11 @@
 //////////////////////////////////////////////////// THIS WILL PROBABLY NOT SCALE BUT WORKS FOR NOW //////////////////////////////////////////////////// 
 //////////////////////////////////////////////////////////// I NEED TO CHECK THIS LATER  ///////////////////////////////////////////////////////////////
 
+
+//MAKE SURE THAT TYPES ARE GOOD IN FILTERS DEFINITION IN CONFIG FILES
+//USING WRONG TYPE WILL CAUSE --------->CastError<------------
+
+
 //Creating filters:
 
 // For keyword searching:
@@ -73,6 +78,8 @@ const createQueryObject = (mongooseModel: mongoose.Model<any>, filtersDefinition
         queryObj.$or = createKeywordSearchArray(filtersDefinitions.keywordStringType, filtersDefinitions.keywordNumberType, paramsObj.keyword);
     }
 
+    //MAKE SURE THAT TYPES ARE GOOD IN FILTERS DEFINITION IN CONFIG FILES
+    //USING WRONG TYPE WILL CAUSE --------->CastError<------------
     return queryObj;
 }
 

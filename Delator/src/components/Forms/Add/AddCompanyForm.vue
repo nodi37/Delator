@@ -1,5 +1,5 @@
 <script>
-import CompanyInputs from '@/components/Forms/Inputs/CompanyInputs';
+//import CompanyInputs from '@/components/Forms/Inputs/CompanyInputs';
 import axios from 'axios';
 
 export default {
@@ -13,7 +13,7 @@ export default {
                 orgNumber: '',
                 companyName: '',
                 companyDescription: '',
-                administratorsIds: [],
+                administratorsEmails: [],
                 logo: '',
 
                 startingHourlyWage: '',
@@ -43,7 +43,7 @@ export default {
         }
     },
     components: {
-        CompanyInputs
+        //CompanyInputs
     }
 }
 </script>
@@ -51,7 +51,7 @@ export default {
 <template>
     <v-form @submit.prevent="submit" ref="form">
 
-        <CompanyInputs v-model="companyInputData" />
+        <!-- <CompanyInputs v-model="companyInputData" /> -->
 
         <div class="d-flex justify-end">
             <v-btn @click="clearForm" color="#BDBDBD" class="white--text mr-4">

@@ -11,27 +11,39 @@ export default {
     }),
     methods: {
         fetchUsers(value) {
+            console.log('FetchUsers')
             this.usersLoading = true;
             const keyword = !!value ? `&keyword=${value}` : '';
-            axios.get(process.env.VUE_APP_API_PATH + `/user?limit=5${keyword}`, { withCredentials: true })
+            axios.get(process.env.VUE_APP_API_PATH + `/user/get-many?limit=5${keyword}`, { withCredentials: true })
                 .then(res => {
-                    res.data.data.forEach((doc) => {
-                        if (!this.usersData.includes(doc)) {
-                            this.usersData.push(doc);
-                        }
-                    });
+                    const data = res.data.data;
+                    if (!!data) {
+                        data.forEach((doc) => {
+                            const user = this.usersData.find(user => user.email === doc.email);
+                            if (!user) {
+                                console.log('Not duplicate')
+                                this.usersData.push(doc);
+                            } else {
+                                console.log('Duplicate, skipping fetchUsers')
+                            }
+                        });
+                    }
                 }).catch(err => console.log(err))
                 .finally(() => this.usersLoading = false);
         },
         fetchSingleUser(value) {
-            this.usersLoading = true;
-            axios.get(process.env.VUE_APP_API_PATH + `/user?email=${value}`, { withCredentials: true })
-                .then(res => {
-                    if (!this.usersData.includes(res.data.data)) {
-                        this.usersData.push(res.data.data);
-                    }
-                }).catch(err => console.log(err))
-                .finally(() => this.usersLoading = false);
+            const user = this.usersData.find(user => user.email === value);
+            if (!user) {
+                console.log('FetchSinge')
+                this.usersLoading = true;
+                axios.get(process.env.VUE_APP_API_PATH + `/user/get-many?email=${value}`, { withCredentials: true })
+                    .then(res => {
+                        this.usersData.push(res.data.data[0]);
+                    }).catch(err => console.log(err))
+                    .finally(() => this.usersLoading = false);
+            } else {
+                console.log('Skip fetchSingle')
+            }
         },
         prepareAutocompleteItemNames: (doc) => `${doc.name + ' ' + doc.lastName}(${doc.email})`,
     },
@@ -48,8 +60,14 @@ export default {
             }
         },
         search: function (newVal) {
-            this.fetchUsers(newVal);
-        }
+            if (!!newVal) {
+                this.fetchUsers(newVal);
+            }
+        },
+        usersData(val) {
+            console.log('Users data:')
+            console.log(val)
+        },
     },
     computed: {
         model: {
@@ -60,9 +78,6 @@ export default {
                 this.$emit('input', value)
             }
         }
-    },
-    mounted() {
-        this.fetchUsers();
     }
 }
 </script>

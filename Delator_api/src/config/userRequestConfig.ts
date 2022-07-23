@@ -8,8 +8,7 @@ const filtersDefinition = {
     keywordStringType: [
         'name',
         'lastName',
-        'email',
-        'phoneNumber'
+        'email'
     ],
     keywordNumberType: [
         'phoneNumber'

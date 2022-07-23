@@ -1,27 +1,17 @@
 <script>
-import CompanyInputs from '@/components/Forms/Inputs/CompanyInputs';
+import CompanyDataInputs from '@/components/Forms/Inputs/CompanyDataInputs';
 import axios from 'axios';
 
 export default {
-    name: 'EditCompanyForm',
+    name: 'EditCompanyDataForm',
     data: () => ({
         companyId: null,
         inputsDisabled: false,
         formData: {
-            pricingPlan: '',
-
             orgNumber: '',
             companyName: '',
             companyDescription: '',
-            administratorsIds: [],
             logo: '',
-
-            startingHourlyWage: '',
-            settlementMethod: '',
-            overtimeAllowance: '',
-            freeDaysAllowance: '',
-            hoursPerDayCount: '',
-            breakTime: ''
         }
 
     }),
@@ -44,7 +34,7 @@ export default {
         }
     },
     components: {
-        CompanyInputs
+        CompanyDataInputs
     },
     mounted() {
         this.companyId = this.companyData._id;
@@ -56,7 +46,7 @@ export default {
 <template>
     <v-form @submit.prevent="submit" ref="form">
 
-        <CompanyInputs v-model="formData" :inputsDisabled="inputsDisabled"/>
+        <CompanyDataInputs v-model="formData" :inputsDisabled="inputsDisabled"/>
 
         <div class="d-flex justify-end">
             <v-btn @click="$emit('cancel')" color="warning" class="white--text mr-4">

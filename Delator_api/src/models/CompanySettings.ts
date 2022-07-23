@@ -13,7 +13,7 @@ const companySettingsSchema = new mongoose.Schema<ICompanySettings>({
         type: Number
     },
 
-    administratorsIds: {
+    administratorsEmails: {
         type: [String]
     },
 

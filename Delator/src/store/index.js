@@ -87,7 +87,7 @@ export default new Vuex.Store({
       return new Promise(async (resolve, reject) => {
         try {
 
-          const res = await axios.get(process.env.VUE_APP_API_PATH + `/company-settings/get-many?administratorsIds=${state.userId}`, { withCredentials: true });
+          const res = await axios.get(process.env.VUE_APP_API_PATH + `/company-settings/get-many?administratorsEmails=${state.userId}`, { withCredentials: true });
           const settingsArr = res.data.data || [];
 
           commit('SET_COMPANIES_SETTINGS', settingsArr);
