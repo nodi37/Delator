@@ -1,12 +1,16 @@
 <script>
+import store from '@/store'
 export default {
     name: 'SettingsLayout',
     data: () => ({
-        langs: ['en', 'no'],
+        langs: ['en', 'no', 'pl'],
     }),
     methods: {
     },
     computed: {
+        lang() {
+            return store.state.userSettings.language;
+        }
     },
     components: {
     }
@@ -15,8 +19,8 @@ export default {
 <template>
     <div>
         <v-icon>mdi-brightness-medium</v-icon>
-
-        <select v-model="$i18n.locale">
+        <!-- this is bad, no setter, to change -->
+        <select v-model="lang">
             <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">
                 {{ lang }}
             </option>

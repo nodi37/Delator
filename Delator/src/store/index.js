@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Vue from 'vue';
 import Vuex from 'vuex';
+import VueI18n from '../i18n';
 
 Vue.use(Vuex);
 
@@ -64,6 +65,7 @@ export default new Vuex.Store({
           const settingsRes = await axios.get(process.env.VUE_APP_API_PATH + `/user-settings/get/${profileRes.data.data.settingsId}`, { withCredentials: true });
           commit('SET_USER_DATA', profileRes.data.data);
           commit('SET_USER_SETTINGS', settingsRes.data.data);
+          VueI18n = settingsRes.data.data.language;
           resolve(profileRes.data.data);
         } catch (error) {
           console.log(error);
@@ -81,14 +83,14 @@ export default new Vuex.Store({
             const res = await axios.get(process.env.VUE_APP_API_PATH + `/company/get/${companyId}`, { withCredentials: true });
             const companyData = res.data.data;
             commit('PUSH_TO_COMPANIES_DATA', companyData);
-            resolve({success: true});
+            resolve({ success: true });
           } catch (error) {
             console.log(error);
             reject(error);
           }
         } else {
           console.log('Company already loaded, skipping request')
-          resolve({success: true});
+          resolve({ success: true });
         }
       });
     },
@@ -107,7 +109,7 @@ export default new Vuex.Store({
             await dispatch('loadCompanyData', settings.companyId);
           });
 
-          resolve({success: true});
+          resolve({ success: true });
 
         } catch (error) {
           console.log(error);
@@ -131,7 +133,7 @@ export default new Vuex.Store({
             await dispatch('loadCompanyData', contract.companyId);
           });
 
-          resolve({success: true});
+          resolve({ success: true });
         } catch (error) {
           console.log(error);
           reject(error);

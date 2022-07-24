@@ -113,10 +113,16 @@ export default {
             <ItemCard v-for="user in users" :key="user._id" :name="user.name + ' ' + user.lastName"
                 :description="user.email" :imgSrc="user.photo" :createDate="user.createDate" class="mb-2">
                 <template v-slot:actions>
+                    <v-btn color="#757575" class="white--text">
+                        {{ $t('contracts') }}
+                    </v-btn>
+                    <v-btn color="#00796B" class="white--text">
+                        {{ $t('raports') }}
+                    </v-btn>
                     <v-btn color="primary" @click="$router.push({ name: 'userEditor', params: { userId: user._id } })">
                         {{ $t('properties') }}
                     </v-btn>
-                    <v-btn color="error" @click="deleteUser(user._id)">
+                    <v-btn color="#FF1744" class="white--text" @click="deleteUser(user._id)">
                         {{ $t('delete') }}
                     </v-btn>
                 </template>
