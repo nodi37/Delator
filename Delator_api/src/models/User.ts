@@ -20,21 +20,6 @@ const userSchema = new mongoose.Schema<IUser>({
         type: String
     },
 
-    superUser: {
-        type: Boolean,
-        required: true,
-        default: false
-    },
-
-    language: {
-        type: String,
-        default: 'no'
-    },
-
-    password: {
-        type: String,
-        required: true
-    },
     createDate: {
         type: Date,
         default: Date.now()

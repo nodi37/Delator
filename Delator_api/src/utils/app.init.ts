@@ -1,5 +1,5 @@
 import { saveNewUser } from "../services/userService";
-import User from "../models/User";
+import UserSettings from "../models/UserSettings";
 
 const initApp = async (): Promise<void> => {
 
@@ -8,18 +8,27 @@ const initApp = async (): Promise<void> => {
     const email = process.env.SU_EMAIL as string;
 
     const superUser = {
-        name,
-        lastName,
-        email,
-        superUser: true
+        profile: {
+            name,
+            lastName,
+            email,
+        },
+        settings: {
+            userId: '',
+            superUser: true,
+            language: '',
+            password: ''
+        }
     }
 
+
     try {
-        const count = await User.countDocuments({ superUser: true });
+        const count = await UserSettings.countDocuments({ superUser: true });
         if (count === 0) {
             await saveNewUser(superUser);
         }
     } catch (error) {
+        console.log(error)
         console.log("Error saving super user");
         console.log("Error")
     }

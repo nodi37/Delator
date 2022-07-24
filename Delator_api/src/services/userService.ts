@@ -3,24 +3,40 @@ import { genRandomPasswordAsHash } from '../utils/password.utils';
 import { calculateSkipLimit } from '../helpers/skipLimitCalculator';
 import { createQueryObject } from '../helpers/queryObjectCreators';
 import User from '../models/User';
-import IDynamicObject from "../interfaces/IDynamicObject";
+import UserSettings from '../models/UserSettings';
 import IQueryError from '../interfaces/IQueryError';
 import IParams from '../interfaces/IParams';
 import newPasswordTemplate from '../templates/emails/newPasswordTemplate';
 import sendEmail from '../utils/email.utils';
+import IUser from '../interfaces/IUser';
+import IUserSettings from '../interfaces/IUserSettings';
 
+interface IBody {
+    profile: IUser;
+    settings: IUserSettings;
+}
 
-const saveNewUser = async (body: IDynamicObject) => {
+const saveNewUser = async (body: IBody) => {
     try {
+        const { name, lastName, email, phoneNumber, photo } = body.profile;
+        const { superUser, language } = body.settings;
+
         const passwords = await genRandomPasswordAsHash();
-        body.password = passwords.passwordHash;
 
-        const response = await new User(body).save();
+        const response = await new User({ name, lastName, email, phoneNumber, photo }).save();
 
-        const email = body.email as string;
+        const settingsBody: IUserSettings = {
+            userId: response._id,
+            password: passwords.passwordHash,
+            language: language || 'no',
+            superUser: superUser || false
+        }
+
+        await new UserSettings(settingsBody).save();
+
         const emailSubject = 'Your password in Delator has been created'
         await sendEmail(newPasswordTemplate(passwords.passwordPlain), emailSubject, email);
-        
+
         return response;
     } catch (error) {
         const catchedError = error as IQueryError;
@@ -34,7 +50,7 @@ const saveNewUser = async (body: IDynamicObject) => {
 };
 
 
-const editExistingUser = async (body: IDynamicObject, id: string) => {
+const editExistingUser = async (body: IUser, id: string) => {
     try {
         const response = await User.findByIdAndUpdate(id, body, { returnDocument: 'after' });
         return response;
@@ -43,7 +59,7 @@ const editExistingUser = async (body: IDynamicObject, id: string) => {
     }
 }
 
-const replaceExistingUser = async (body: IDynamicObject, id: string) => {
+const replaceExistingUser = async (body: IUser, id: string) => {
     try {
         const response = await User.findOneAndReplace({ _id: id }, body);
         return response;

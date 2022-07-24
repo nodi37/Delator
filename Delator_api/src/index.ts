@@ -50,6 +50,9 @@ app.use(emptyFieldsFilter);
 import userRoutes from "./routes/user.routes";
 app.use('/v1/user', userRoutes);
 
+import userSettingsRoutes from "./routes/user.settings.routes";
+app.use('/v1/user-settings', userSettingsRoutes);
+
 import companyRoutes from './routes/company.routes';
 app.use('/v1/company', companyRoutes);
 

@@ -4,11 +4,13 @@ import { createQueryObject } from '../helpers/queryObjectCreators';
 import IDynamicObject from '../interfaces/IDynamicObject';
 import Company from '../models/Company';
 import IParams from '../interfaces/IParams';
+import CompanySettings from '../models/CompanySettings';
 
 
 const saveNewCompany = async (body: IDynamicObject) => {
     try {
         const response = await new Company(body).save();
+        await new CompanySettings({companyId: response._id}).save();
         return response;
     } catch (error) {
         console.log(error);
