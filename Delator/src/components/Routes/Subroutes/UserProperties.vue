@@ -1,7 +1,8 @@
 <script>
 import axios from 'axios';
+import store from '@/store';
 import EditUserForm from '@/components/Forms/Edit/EditUserForm.vue';
-import AddContractForm from '@/components/Forms/Add/AddContractForm.vue';
+import EditUserSettingsForm from '@/components/Forms/Edit/EditUserSettingsForm.vue';
 import TabsComponent from '@/components/UI/TabsComponent.vue';
 import InfoBoard from '@/components/UI/InfoBoard.vue';
 
@@ -9,20 +10,21 @@ export default {
     name: 'UserPropeprties',
     data: () => ({
         userData: {},
+        userSettings: {},
         userContracts: [],
         editMode: false,
         addMode: false,
         form: '',
         tabs: [
             { name: 'general-info', icon: 'mdi-information-outline' },
-            { name: 'contracts', icon: 'mdi-file-sign' },
+            { name: 'settings', icon: 'mdi-cog' },
         ],
         userInfoBoard: [],
-        contractsInfoBoard: []
+        userSettingsInfoBoard: []
     }),
     methods: {
-        loadUserData() {
-            axios.get(process.env.VUE_APP_API_PATH + `/user/get/${this.$route.params.userId}`, { withCredentials: true })
+        async loadUserData() {
+            return axios.get(process.env.VUE_APP_API_PATH + `/user/get/${this.$route.params.userId}`, { withCredentials: true })
                 .then(res => {
                     this.userData = res.data.data;
                     const { name, lastName, email, phoneNumber, photo } = res.data.data;
@@ -33,35 +35,43 @@ export default {
                         { type: 'text', name: 'email', value: email },
                         { type: 'text', name: 'phone-number', value: phoneNumber },
                     ]
+                }).catch(err => {
+                    console.log(err);
+                    alert(this.$t('error-occured'));
                 });
         },
-        loadContracts() {
-            axios.get(process.env.VUE_APP_API_PATH + `/contract?userId=${this.$route.params.userId}`, { withCredentials: true })
+        async loadUserSettings() {
+            return axios.get(process.env.VUE_APP_API_PATH + `/user-settings/get/${this.userData.settingsId}`, { withCredentials: true })
                 .then(res => {
-                    this.userContracts = res.data.data;
+                    this.userSettings = res.data.data;
+                    const language = store.state.languages.find(language => this.userSettings.language === language.shortName);
+                    this.userSettingsInfoBoard = [
+                        { type: 'text', name: 'language', value: language.fullName },
+                        { type: 'text', name: 'password', value: this.$t('hidden') },
+                    ];
+                }).catch(err => {
+                    console.log(err);
+                    alert(this.$t('error-occured'));
                 });
         },
-        addedUser() {
+        editedUser() {
             this.loadUserData();
             this.editMode = !this.editMode;
         },
-        addedContract() {
-            this.loadContracts();
-            this.addMode = !this.addMode;
-        },
-        downloadContract(id) {
-            console.log("Download contract id: " + id)
+        editedUserSettings() {
+            this.loadUserSettings();
+            this.editMode = !this.editMode;
         }
     },
-    mounted: function () {
-        this.loadUserData();
-        this.loadContracts();
+    mounted: async function () {
+        await this.loadUserData();
+        await this.loadUserSettings();
     },
     components: {
         EditUserForm,
+        EditUserSettingsForm,
         TabsComponent,
         InfoBoard,
-        AddContractForm
     }
 }
 </script>
@@ -69,10 +79,12 @@ export default {
 <template>
     <div class="no-scroll-container">
         <div class="scroll-container">
+
             <TabsComponent :tabs="tabs">
+            
                 <template v-slot:tab-items>
                     <v-tab-item>
-                        <EditUserForm class="pa-4" v-if="editMode" v-on:addedUser="addedUser"
+                        <EditUserForm class="pa-4" v-if="editMode" v-on:editedUser="editedUser"
                             v-on:cancel="editMode = false" :userData="userData" />
                         <InfoBoard v-else :data="userInfoBoard">
                             <template v-slot:actions>
@@ -83,48 +95,19 @@ export default {
                     </v-tab-item>
 
                     <v-tab-item>
-                        <AddContractForm v-if="addMode" v-on:addedContract="addedContract" />
-                        <v-expansion-panels v-else>
-                            <v-expansion-panel v-for="contract in userContracts" :key="contract._id">
-                                <v-expansion-panel-header>
-                                    {{ $t('contract-with') + ': ' + contract.companyName }}
-                                </v-expansion-panel-header>
-                                <v-expansion-panel-content>
-                                    <InfoBoard :data="[
-                                        { type: 'text', name: 'with', value: contract.companyName },
-                                        { type: 'text', name: 'contract-type', value: contract.contractType },
-                                        { type: 'percent', name: 'employment-dimension', value: contract.employmentDimension },
-                                        { type: 'text', name: 'hourly-wage', value: contract.hourlyWage },
-                                    ]">
-                                        <template v-slot:actions>
-                                            <v-btn color="#00E676" class="white--text mr-4" elevation="2"
-                                                @click="downloadContract(contract._id)">
-                                                {{
-                                                        $t('download')
-                                                }}
-                                            </v-btn>
-
-                                            <v-btn color="primary" elevation="2" @click="editMode = !editMode">{{
-                                                    $t('edit')
-                                            }}
-                                            </v-btn>
-
-                                        </template>
-                                    </InfoBoard>
-                                </v-expansion-panel-content>
-                            </v-expansion-panel>
-                        </v-expansion-panels>
-                        <div v-if="!addMode" class="d-flex justify-end">
-                            <v-btn color="#00E676" class="white--text ma-1 mt-4" elevation="2"
-                                @click="addMode = !addMode">
-                                {{
-                                        $t('add')
-                                }}
-                            </v-btn>
-                        </div>
+                        <EditUserSettingsForm class="pa-4" v-if="editMode" v-on:editedUserSettings="editedUserSettings"
+                            v-on:cancel="editMode = false" :userSettings="userSettings" />
+                        <InfoBoard v-else :data="userSettingsInfoBoard">
+                            <template v-slot:actions>
+                                <v-btn color="primary" elevation="2" @click="editMode = !editMode">{{ $t('edit') }}
+                                </v-btn>
+                            </template>
+                        </InfoBoard>
                     </v-tab-item>
                 </template>
+
             </TabsComponent>
+
         </div>
     </div>
 </template>

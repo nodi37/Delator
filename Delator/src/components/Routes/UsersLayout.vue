@@ -1,6 +1,5 @@
 <script>
 import axios from 'axios';
-//import store from '@/store';
 import ItemCard from '@/components/UI/ItemCard';
 import ConfirmDialog from '@/components/UI/ConfirmDialog';
 import TitledDialog from '@/components/UI/TitledDialog';
@@ -36,7 +35,7 @@ export default {
                 this.isLoading = true;
                 const skipQuery = this.skip ? `skip=${this.skip}` : '';
                 const keywordQuery = !!this.searchKeyword ? `&keyword=${this.searchKeyword}` : '';
-                axios.get( process.env.VUE_APP_API_PATH + `/user?${skipQuery}${keywordQuery}`, { withCredentials: true })
+                axios.get(process.env.VUE_APP_API_PATH + `/user/get-many?${skipQuery}${keywordQuery}`, { withCredentials: true })
                     .then(res => {
                         const arr = res.data.data;
                         this.nothingMore = arr.length < 10 ? true : false;
@@ -50,20 +49,23 @@ export default {
             }
         },
         async deleteUser(userId) {
-            const userName = this.users.find(val => val._id === userId).name;
+            const user = this.users.find(val => val._id === userId);
             const ok = await this.$refs.confirm.show({
-                text: this.$t('delete') + ' ' + userName,
+                text: `${this.$t('delete')} ${user.name} ${user.lastName}(${user.email})`,
                 confirmBtnText: 'delete',
                 cancelBtnText: 'cancel',
                 confirmBtnColor: 'error',
                 cancelBtnColor: 'primary'
             });
             if (ok) {
-                axios.delete( process.env.VUE_APP_API_PATH + `/user/delete/${userId}`, { withCredentials: true })
-                    .then(res => {
-                        this.users = this.users.filter(val => val._id != userId);
-                    })
-                    .catch(error => alert($t('error')));
+                try {
+                    const user = await axios.delete(process.env.VUE_APP_API_PATH + `/user/delete/${userId}`, { withCredentials: true });
+                    await axios.delete(process.env.VUE_APP_API_PATH + `/user-settings/delete/${user.data.data.settingsId}`, { withCredentials: true });
+                    this.users = this.users.filter(user => user._id != userId);
+                } catch (error) {
+                    console.log(error);
+                    alert(this.$t('server-error'));
+                }
             }
         }
     },
@@ -109,14 +111,9 @@ export default {
         <div class="scroll-container" @scroll="onScroll">
 
             <ItemCard v-for="user in users" :key="user._id" :name="user.name + ' ' + user.lastName"
-                :description="user.description" :imgSrc="user.photo" :createDate="user.createDate" class="mb-2">
+                :description="user.email" :imgSrc="user.photo" :createDate="user.createDate" class="mb-2">
                 <template v-slot:actions>
-                    <!-- <v-btn color="secondary"
-                        @click="$router.push({ name: 'companyUsers', params: { userId: user._id } })">
-                        {{ $t('employees') }}
-                    </v-btn> -->
-                    <v-btn color="primary"
-                        @click="$router.push({ name: 'userEditor', params: { userId: user._id } })">
+                    <v-btn color="primary" @click="$router.push({ name: 'userEditor', params: { userId: user._id } })">
                         {{ $t('properties') }}
                     </v-btn>
                     <v-btn color="error" @click="deleteUser(user._id)">

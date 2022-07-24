@@ -19,6 +19,11 @@ export default new Vuex.Store({
     settlementMethods: [
       { no: 1, title: 'settlement-by-day' },
       { no: 2, title: 'settlement-by-week' }
+    ],
+    languages: [
+      { shortName: 'no', fullName: 'Norsk' },
+      { shortName: 'pl', fullName: 'Polski' },
+      { shortName: 'en', fullName: 'English' },
     ]
   },
   mutations: {
@@ -56,10 +61,9 @@ export default new Vuex.Store({
       return new Promise(async (resolve, reject) => {
         try {
           const profileRes = await axios.get(process.env.VUE_APP_API_PATH + `/user/get/${state.userId}`, { withCredentials: true });
-          const settingsRes = await axios.get(process.env.VUE_APP_API_PATH + `/user-settings/get-many?userId=${state.userId}`, { withCredentials: true });
+          const settingsRes = await axios.get(process.env.VUE_APP_API_PATH + `/user-settings/get/${profileRes.data.data.settingsId}`, { withCredentials: true });
           commit('SET_USER_DATA', profileRes.data.data);
-          commit('SET_USER_SETTINGS', settingsRes.data.data[0]);
-          console.log(settingsRes.data.data)
+          commit('SET_USER_SETTINGS', settingsRes.data.data);
           resolve(profileRes.data.data);
         } catch (error) {
           console.log(error);

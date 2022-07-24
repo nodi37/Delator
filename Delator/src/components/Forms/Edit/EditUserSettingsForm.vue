@@ -1,28 +1,25 @@
 <script>
-import UserInputs from '@/components/Forms/Inputs/UserInputs';
+import UserSettingsInputs from '@/components/Forms/Inputs/UserSettingsInputs';
 import axios from 'axios';
 
 export default {
-    name: 'EditUserForm',
+    name: 'EditUserSettingsForm',
     data: () => ({
-        userId: '',
+        settingsId: '',
         inputsDisabled: false,
         formData: {
-            name: '',
-            lastName: '',
-            email: '',
-            phoneNumber: '',
-            photo: ''
+            language: '',
+            newPassword: ''
         }
 
     }),
-    props: ['userData'],
+    props: ['userSettings'],
     methods: {
         submit() {
             if (this.$refs.form.validate()) {
                 this.inputsDisabled = true;
-                axios.patch(process.env.VUE_APP_API_PATH + '/user/edit/' + this.userId, this.formData, { withCredentials: true })
-                    .then(res => this.$emit('editedUser', res.data.data))
+                axios.patch(process.env.VUE_APP_API_PATH + '/user-settings/edit/' + this.settingsId, this.formData, { withCredentials: true })
+                    .then(res => this.$emit('editedUserSettings', res.data.data))
                     .catch(err => {
                         console.log(err);
                         alert(this.$t('error-occured'));
@@ -35,11 +32,11 @@ export default {
         }
     },
     mounted() {
-        this.userId = this.userData._id;
-        this.formData = this.userData;
+        this.settingsId = this.userSettings._id;
+        this.formData = this.userSettings;
     },
     components: {
-        UserInputs
+        UserSettingsInputs
     }
 }
 </script>
@@ -47,7 +44,7 @@ export default {
 <template>
     <v-form @submit.prevent="submit" ref="form">
 
-        <UserInputs v-model="formData" :inputsDisabled="inputsDisabled"/>
+        <UserSettingsInputs v-model="formData" :inputsDisabled="inputsDisabled"/>
 
         <div class="d-flex justify-end">
             <v-btn @click="$emit('cancel')" color="warning" class="white--text mr-4">
