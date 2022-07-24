@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     userId: '',
     userData: {},
+    userSettings: {},
     companiesData: [],
     companiesToManage: [],
     employmentContracts: [],
@@ -30,6 +31,9 @@ export default new Vuex.Store({
     SET_USER_DATA(state, data) {
       state.userData = data;
     },
+    SET_USER_SETTINGS(state, data) {
+      state.userSettings = data;
+    },
     SET_COMPANIES_SETTINGS(state, data) {
       state.companiesToManage = data;
     },
@@ -51,9 +55,12 @@ export default new Vuex.Store({
     loadUserData({ commit, state }) {
       return new Promise(async (resolve, reject) => {
         try {
-          const res = await axios.get(process.env.VUE_APP_API_PATH + `/user/get/${state.userId}`, { withCredentials: true });
-          commit('SET_USER_DATA', res.data.data);
-          resolve(res.data.data);
+          const profileRes = await axios.get(process.env.VUE_APP_API_PATH + `/user/get/${state.userId}`, { withCredentials: true });
+          const settingsRes = await axios.get(process.env.VUE_APP_API_PATH + `/user-settings/get-many?userId=${state.userId}`, { withCredentials: true });
+          commit('SET_USER_DATA', profileRes.data.data);
+          commit('SET_USER_SETTINGS', settingsRes.data.data[0]);
+          console.log(settingsRes.data.data)
+          resolve(profileRes.data.data);
         } catch (error) {
           console.log(error);
           reject(error);

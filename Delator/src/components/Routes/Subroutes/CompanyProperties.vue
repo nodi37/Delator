@@ -50,7 +50,7 @@ export default {
                 });
         },
         loadContracts() {
-            axios.get(process.env.VUE_APP_API_PATH + `/employment-contract/get-many?companyId=${this.$route.params.companyId}`)
+            axios.get(process.env.VUE_APP_API_PATH + `/employment-contract/get-many?companyId=${this.$route.params.companyId}`, {withCredentials: true})
                 .then(res => this.companyContracts = res.data.data);
         },
 

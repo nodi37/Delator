@@ -12,7 +12,7 @@ export default {
             return store.state.companiesData;
         },
         menuItems() {
-            if (store.state.userData.superUser) {
+            if (store.state.userSettings.superUser) {
                 const superUserItems = [
                     { title: 'companies', icon: 'mdi-domain', pathName: 'companies' },
                     { title: 'users', icon: 'mdi-account', pathName: 'allUsers' },
