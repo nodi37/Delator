@@ -3,7 +3,6 @@ import store from '@/store';
 import axios from 'axios';
 import EditCompanyDataForm from '@/components/Forms/Edit/EditCompanyDataForm.vue';
 import EditCompanySettingsForm from '@/components/Forms/Edit/EditCompanySettingsForm.vue';
-import AddContractForm from '@/components/Forms/Add/AddContractForm.vue';
 import TabsComponent from '@/components/UI/TabsComponent.vue';
 import InfoBoard from '@/components/UI/InfoBoard.vue';
 
@@ -11,7 +10,6 @@ export default {
     name: 'CompanyProperties',
     data: () => ({
         companyData: {},
-        companyContracts: [],
         companySettings: [],
         publicInfoBoard: [],
         settingsInfoBoard: [],
@@ -23,8 +21,8 @@ export default {
         ],
     }),
     methods: {
-        loadCompanyData() {
-            axios.get(process.env.VUE_APP_API_PATH + `/company/get/${this.$route.params.companyId}`, { withCredentials: true })
+        async loadCompanyData() {
+            return axios.get(process.env.VUE_APP_API_PATH + `/company/get/${this.$route.params.companyId}`, { withCredentials: true })
                 .then(res => {
                     this.companyData = res.data.data;
                     this.publicInfoBoard = [
@@ -35,10 +33,10 @@ export default {
                     ]
                 });
         },
-        loadCompanySettings() {
-            axios.get(process.env.VUE_APP_API_PATH + `/company-settings/get-many?companyId=${this.$route.params.companyId}`, { withCredentials: true })
+        async loadCompanySettings() {
+            return axios.get(process.env.VUE_APP_API_PATH + `/company-settings/get/${this.companyData.settingsId}`, { withCredentials: true })
                 .then(res => {
-                    this.companySettings = res.data.data[0];
+                    this.companySettings = res.data.data;
                     this.settingsInfoBoard = [
                         { type: 'text', name: 'hourly-wage', value: this.companySettings.startingHourlyWage },
                         { type: 'text', name: 'hours-per-day', value: this.companySettings.hoursPerDayCount },
@@ -48,11 +46,6 @@ export default {
                     ]
                 });
         },
-        loadContracts() {
-            axios.get(process.env.VUE_APP_API_PATH + `/employment-contract/get-many?companyId=${this.$route.params.companyId}`, {withCredentials: true})
-                .then(res => this.companyContracts = res.data.data);
-        },
-
         edditedCompany() {
             this.editMode = false;
             this.loadCompanyData();
@@ -61,10 +54,7 @@ export default {
             this.editMode = false;
             this.loadCompanySettings();
         },
-        addedContract() {
-            this.addMode = false;
-            this.loadContracts();
-        }
+
     },
     computed: {
         pricingPlans() {
@@ -74,17 +64,15 @@ export default {
             return store.state.settlementMethods;
         }
     },
-    mounted: function () {
-        this.loadCompanyData();
-        this.loadContracts();
-        this.loadCompanySettings();
+    mounted: async function () {
+        await this.loadCompanyData();
+        await this.loadCompanySettings();
     },
     components: {
         EditCompanyDataForm,
         EditCompanySettingsForm,
         TabsComponent,
-        InfoBoard,
-        AddContractForm
+        InfoBoard
     }
 }
 </script>
@@ -114,12 +102,20 @@ export default {
 
                         <InfoBoard v-else :data="settingsInfoBoard">
                             <template>
+                                <p v-if="companySettings.administratorsEmails" class="subtitle-1">
+                                    <b>
+                                        {{ $t('administrators') }}:
+                                    </b>
+                                    <span v-for="email in companySettings.administratorsEmails" :key="email">
+                                        {{ email }},
+                                    </span>
+                                </p>
                                 <p v-if="companySettings.pricingPlan" class="subtitle-1">
                                     <b>
                                         {{ $t('pricing-plan') }}:
                                     </b>
                                     {{
-                                        $t(pricingPlans.find(doc => doc.no == companySettings.pricingPlan).title)
+                                            $t(pricingPlans.find(doc => doc.no == companySettings.pricingPlan).title)
                                     }}
                                 </p>
                                 <p v-if="companySettings.settlementMethod" class="subtitle-1">
@@ -127,7 +123,7 @@ export default {
                                         {{ $t('settlement-method') }}:
                                     </b>
                                     {{
-                                        $t(settlementMethods.find(doc => doc.no == companySettings.settlementMethod).title)
+                                            $t(settlementMethods.find(doc => doc.no == companySettings.settlementMethod).title)
                                     }}
                                 </p>
                             </template>
