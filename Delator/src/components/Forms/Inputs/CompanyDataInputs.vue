@@ -6,6 +6,7 @@ export default {
     name: 'CompanyDataInputs',
     props: ['value', 'inputsDisabled'],
     data: () => ({
+        inputsDisabledInside: false,
         rules: {
             required: value => !!value || 'This field is equired.',
             isNumber: value => { if (!!value) { return !isNaN(value) || 'This field should be a number.' } else { return true } },
@@ -27,14 +28,14 @@ export default {
             if (!!val) {
                 const orgNumString = val.toString();
                 if (this.model.companyName.length < 1 && orgNumString.length === 9) {
-                    this.inputsDisabled = true;
+                    this.inputsDisabledInside = true;
                     axios.get(`https://data.brreg.no/enhetsregisteret/api/enheter/${val}`)
                         .then(res => {
                             this.model.companyName = res.data.navn;
                             this.model.description = res.data.naeringskode1.beskrivelse;
                         })
                         .catch(err => console.log('Cant fetch company'))
-                        .finally(this.inputsDisabled = false);
+                        .finally(this.inputsDisabledInside = false);
                 }
             }
         },
@@ -55,17 +56,17 @@ export default {
 <template>
     <div>
         <v-text-field pattern="\d*" outlined dense counter="9" :rules="[rules.isNumber, rules.orgNumber]"
-            v-model.trim="model.orgNumber" :label="$t('org-number')" :disabled="inputsDisabled" />
+            v-model.trim="model.orgNumber" :label="$t('org-number')" :disabled="inputsDisabled || inputsDisabledInside" />
 
         <v-text-field outlined dense :rules="[rules.required]" v-model.trim="model.companyName"
-            :label="$t('company-name')" :disabled="inputsDisabled" />
+            :label="$t('company-name')" :disabled="inputsDisabled || inputsDisabledInside" />
 
         <v-textarea auto-grow outlined rows="3" row-height="15" :label="$t('description')"
-            v-model="model.companyDescription" :disabled="inputsDisabled">
+            v-model="model.companyDescription" :disabled="inputsDisabled || inputsDisabledInside">
         </v-textarea>
 
         <v-file-input outlined dense accept="image/*" :label="$t('logo')" @change="prepareLogo" prepend-icon="mdi-image"
-            :disabled="inputsDisabled" />
+            :disabled="inputsDisabled || inputsDisabledInside" />
     </div>
 
 </template>

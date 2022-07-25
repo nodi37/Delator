@@ -11,7 +11,7 @@ import NothingMoreBar from '@/components/UI/NothingMoreBar.vue';
 import LoadingBar from '@/components/UI/LoadingBar.vue';
 
 export default {
-    name: 'CompaniesLayout',
+    name: 'CompaniesRoute',
     data: () => ({
         companies: [],
         skip: 0,
@@ -36,7 +36,7 @@ export default {
                 this.isLoading = true;
                 const skipQuery = this.skip ? `skip=${this.skip}` : '';
                 const keywordQuery = !!this.searchKeyword ? `&keyword=${this.searchKeyword}` : '';
-                axios.get( process.env.VUE_APP_API_PATH + `/company/get-many?${skipQuery}${keywordQuery}`, { withCredentials: true })
+                axios.get(process.env.VUE_APP_API_PATH + `/company/get-many?${skipQuery}${keywordQuery}`, { withCredentials: true })
                     .then(res => {
                         const arr = res.data.data;
                         this.nothingMore = arr.length < 10 ? true : false;
@@ -59,11 +59,14 @@ export default {
                 cancelBtnColor: 'primary'
             });
             if (ok) {
-                axios.delete( process.env.VUE_APP_API_PATH + `/company/${companyId}`)
+                axios.delete(process.env.VUE_APP_API_PATH + `/company/${companyId}`)
                     .then(res => {
                         this.companies = this.companies.filter(val => val._id != companyId);
                     })
-                    .catch(error => alert($t('error')));
+                    .catch(error => {
+                        console.log(error)
+                        alert(this.$t('error'));
+                    });
             }
         }
     },
@@ -109,12 +112,15 @@ export default {
         <div class="scroll-container" @scroll="onScroll">
 
             <ItemCard v-for="company in companies" :key="company._id" :name="company.companyName"
-                :description="company.companyDescription" :imgSrc="company.logo" :createDate="company.createDate" class="mb-2">
+                :description="company.companyDescription" :imgSrc="company.logo" :createDate="company.createDate"
+                class="mb-2">
 
                 <template v-slot:actions>
-                    <v-btn color="secondary"
-                        @click="$router.push({ name: 'companyUsers', params: { companyId: company._id } })">
-                        {{ $t('employees') }}
+                    <v-btn color="#757575" class="white--text" @click="$router.push({ name: 'contractsRoute', query: { companyId: company._id}})">
+                        {{ $t('contracts') }}
+                    </v-btn>
+                    <v-btn color="#00796B" class="white--text" @click="$router.push({ name: 'reportsRoute', query: { companyId: company._id }})">
+                        {{ $t('reports') }}
                     </v-btn>
                     <v-btn color="primary"
                         @click="$router.push({ name: 'companyEditor', params: { companyId: company._id } })">

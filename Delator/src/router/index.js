@@ -1,12 +1,17 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import DashboardLayout from '@/components/Routes/DashboardLayout';
-import SettingsLayout from '@/components/Routes/SettingsLayout';
-import CompaniesLayout from '@/components/Routes/CompaniesLayout';
-import UsersLayout from '@/components/Routes/UsersLayout';
+import store from '@/store';
+//MAIN MENU ROUTES
+import DashboardRoute from '@/components/Routes/DashboardRoute';
+import CompaniesRoute from '@/components/Routes/CompaniesRoute';
+import UsersRoute from '@/components/Routes/UsersRoute';
+import ReportsRoute from '@/components/Routes/ReportsRoute';
+import ContractsRoute from '@/components/Routes/ContractsRoute';
+import SettingsRoute from '@/components/Routes/SettingsRoute';
+//SUNBROUTES
 import CompanyProperties from '@/components/Routes/Subroutes/CompanyProperties';
 import UserProperties from '@/components/Routes/Subroutes/UserProperties';
-import store from '@/store';
+
 
 Vue.use(VueRouter);
 
@@ -48,25 +53,42 @@ const routes = [
     component: () => import('../views/AppView'),
     beforeEnter: appRouteGuard,
     children: [
+      //MAIN MENU ROUTES
       {
         path: 'dashboard',
         name: 'dashboard',
-        component: DashboardLayout
+        component: DashboardRoute
       },
       {
         path: 'companies',
         name: 'companies',
-        component: CompaniesLayout
+        component: CompaniesRoute
       },
       {
         path: 'users',
         name: 'allUsers',
-        component: UsersLayout
+        component: UsersRoute
       },
+      {
+        path: 'reports',
+        name: 'reportsRoute',
+        component: ReportsRoute
+      },
+      {
+        path: 'contracts',
+        name: 'contractsRoute',
+        component: ContractsRoute
+      },
+      {
+        path: 'settings',
+        name: 'settings',
+        component: SettingsRoute
+      },
+      //SUBROUTES
       {
         path: 'users/:companyId',
         name: 'companyUsers',
-        component: UsersLayout
+        component: UsersRoute
       },
       {
         path: 'company/:companyId',
@@ -78,11 +100,6 @@ const routes = [
         name: 'userEditor',
         component: UserProperties
       },
-      {
-        path: 'settings',
-        name: 'settings',
-        component: SettingsLayout
-      }
     ]
   }
 ]

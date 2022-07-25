@@ -19,15 +19,15 @@ export default {
     methods: {
         submit() {
             if (this.$refs.form.validate()) {
-                console.log(this.formData)
                 this.inputsDisabled = true;
                 axios.post(process.env.VUE_APP_API_PATH + '/contract', this.formData, { withCredentials: true })
-                    .then(res => this.$emit('addedContract', res.data.data))
-                    .catch(err => {
+                    .then(res => {
+                        this.clearForm();
+                        this.$emit('addedContract', res.data.data);
+                    }).catch(err => {
                         console.log(err);
                         alert(this.$t('error-occured'));
-                    })
-                    .finally(() => this.inputsDisabled = false);
+                    }).finally(() => this.inputsDisabled = false);
             }
         },
         clearForm() {

@@ -4,7 +4,7 @@ import AddBtn from '@/components/UI/AddBtn.vue';
 import Dialog from '@/components/Dialog.vue';
 
 export default {
-  name: "EmployeeLayout",
+  name: "EmployeeRoute",
   data: () => ({
     dialogVisible: false,
   }),

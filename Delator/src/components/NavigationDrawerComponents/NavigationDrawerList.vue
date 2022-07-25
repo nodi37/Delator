@@ -16,8 +16,8 @@ export default {
                 const superUserItems = [
                     { title: 'companies', icon: 'mdi-domain', pathName: 'companies' },
                     { title: 'users', icon: 'mdi-account', pathName: 'allUsers' },
-                    { title: 'reports', icon: 'mdi-file-chart-outline', pathName: 'allUsers' },
-                    { title: 'contracts', icon: 'mdi-file-sign', pathName: 'allUsers' },
+                    { title: 'reports', icon: 'mdi-file-chart-outline', pathName: 'reportsRoute' },
+                    { title: 'contracts', icon: 'mdi-file-sign', pathName: 'contractsRoute' },
                 ]
 
                 return {

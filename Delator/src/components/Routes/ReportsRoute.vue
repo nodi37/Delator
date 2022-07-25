@@ -1,7 +1,7 @@
 <script>
 import store from '@/store';
 export default {
-    name: 'DashboardLayout',
+    name: 'ReportsRoute',
     data: () => ({
     }),
     methods: {
@@ -11,11 +11,12 @@ export default {
     components: {
     },
     mounted: function() {
+        console.log(this.$route.query)
     }
 }
 </script>
 <template>
     <div>
-        <h1>Dashboard</h1>
+        <h1>Reports</h1>
     </div>
 </template>

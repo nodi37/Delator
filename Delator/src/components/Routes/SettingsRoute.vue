@@ -1,7 +1,7 @@
 <script>
 import store from '@/store'
 export default {
-    name: 'SettingsLayout',
+    name: 'SettingsRoute',
     data: () => ({
         langs: ['en', 'no', 'pl'],
     }),

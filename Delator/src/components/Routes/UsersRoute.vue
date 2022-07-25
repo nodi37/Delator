@@ -10,7 +10,7 @@ import NothingMoreBar from '@/components/UI/NothingMoreBar.vue';
 import LoadingBar from '@/components/UI/LoadingBar.vue';
 
 export default {
-    name: 'UsersLayout',
+    name: 'UsersRoute',
     data: () => ({
         users: [],
         skip: 0,
@@ -113,11 +113,11 @@ export default {
             <ItemCard v-for="user in users" :key="user._id" :name="user.name + ' ' + user.lastName"
                 :description="user.email" :imgSrc="user.photo" :createDate="user.createDate" class="mb-2">
                 <template v-slot:actions>
-                    <v-btn color="#757575" class="white--text">
+                    <v-btn color="#757575" class="white--text" @click="$router.push({ name: 'contractsRoute', query: { userId: user._id }})">
                         {{ $t('contracts') }}
                     </v-btn>
-                    <v-btn color="#00796B" class="white--text">
-                        {{ $t('raports') }}
+                    <v-btn color="#00796B" class="white--text" @click="$router.push({ name: 'reportsRoute', query: { userId: user._id }})">
+                        {{ $t('reports') }}
                     </v-btn>
                     <v-btn color="primary" @click="$router.push({ name: 'userEditor', params: { userId: user._id } })">
                         {{ $t('properties') }}

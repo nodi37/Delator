@@ -19,12 +19,13 @@ export default {
             if (this.$refs.form.validate()) {
                 this.inputsDisabled = true;
                 axios.post(process.env.VUE_APP_API_PATH + '/user/add', {profile: this.formData}, { withCredentials: true })
-                    .then(res => this.$emit('addedUser', res.data.data))
-                    .catch(err => {
+                    .then(res => {
+                        this.clearForm();
+                        this.$emit('addedUser', res.data.data);
+                    }).catch(err => {
                         console.log(err);
                         alert(this.$t('error-occured'));
-                    })
-                    .finally(() => this.inputsDisabled = false);
+                    }).finally(() => this.inputsDisabled = false);
             }
         },
         clearForm() {
