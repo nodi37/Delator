@@ -1,9 +1,10 @@
 import { maxResponseCount, filtersDefinition } from '../config/userRequestConfig';
-import { genRandomPasswordAsHash } from '../utils/password.utils';
+import { defaultAppLanguage } from '../config/AppConfig';
+import { genRandomPassword } from '../utils/password.utils';
 import { calculateSkipLimit } from '../helpers/skipLimitCalculator';
 import { createQueryObject } from '../helpers/queryObjectCreators';
 import User from '../models/User';
-import UserSettings from '../models/UserSettings';
+import { saveNewUserSettings } from '../services/userSettingsService';
 import IQueryError from '../interfaces/IQueryError';
 import IParams from '../interfaces/IParams';
 import newPasswordTemplate from '../templates/emails/newPasswordTemplate';
@@ -19,20 +20,20 @@ interface IBody {
 const saveNewUser = async (body: IBody) => {
     try {
         const { name, lastName, email, phoneNumber, photo } = body.profile;
-        const { superUser, language } = body.settings;
-
-        const passwords = await genRandomPasswordAsHash();
-
-        const response = await new User({ name, lastName, email, phoneNumber, photo }).save();
+        const language = !!body.settings ? body.settings.language : defaultAppLanguage;
+        const superUser = !!body.settings ? body.settings.superUser : false;
+        const passwords = await genRandomPassword();
 
         const settingsBody: IUserSettings = {
-            userId: response._id,
             password: passwords.passwordHash,
             language: language || 'no',
             superUser: superUser || false
         }
 
-        await new UserSettings(settingsBody).save();
+        const userSettings = await saveNewUserSettings(settingsBody)
+        const settingsId = userSettings._id;
+
+        const response = await new User({ name, lastName, email, phoneNumber, photo, settingsId }).save();
 
         const emailSubject = 'Your password in Delator has been created'
         await sendEmail(newPasswordTemplate(passwords.passwordPlain), emailSubject, email);
@@ -70,7 +71,7 @@ const replaceExistingUser = async (body: IUser, id: string) => {
 
 const deleteSingleUser = async (id: string) => {
     try {
-        const response = await User.findByIdAndDelete(id)
+        const response = await User.findByIdAndDelete(id);
         return response;
     } catch (error) {
         console.log(error);
@@ -79,7 +80,7 @@ const deleteSingleUser = async (id: string) => {
 
 const getOneUser = async (id: string) => {
     try {
-        const response = await User.findById(id)
+        const response = await User.findById(id);
         return response;
     } catch (error) {
         console.log(error);

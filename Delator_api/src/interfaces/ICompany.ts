@@ -6,4 +6,5 @@ export default interface ICompany {
     companyName: String;
     companyDescription: String;
     logo: String;
+    settingsId: String;
 }

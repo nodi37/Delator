@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export default {
     name: 'CompanyInputs',
-    props: ['value', 'label', 'multiple', 'inputsDisabled'],
+    props: ['value', 'label', 'multiple', 'inputsDisabled', 'rules'],
     data: () => ({
         search: '',
         usersData: [],
@@ -84,7 +84,7 @@ export default {
 
 <template>
 
-    <v-combobox v-model="model" :loading="usersLoading" :search-input.sync="search" :items="usersData"
+    <v-combobox v-model="model" :rules="rules" :loading="usersLoading" :search-input.sync="search" :items="usersData"
         :item-text="prepareAutocompleteItemNames" item-value="email" :return-object="false" :label="$t(label)"
         :disabled="inputsDisabled" :no-data-text="$t('no-data')" deletable-chips clearable :multiple="multiple" outlined
         small-chips>

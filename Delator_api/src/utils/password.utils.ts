@@ -7,7 +7,7 @@ interface IRandomPass {
     passwordHash: string;
 }
 
-const genRandomPasswordAsHash = async (): Promise<IRandomPass> => {
+const genRandomPassword = async (): Promise<IRandomPass> => {
     let password = "";
     let hash = "";
 
@@ -54,4 +54,4 @@ const encryptPassword = async (passwordPlain: string): Promise<string> => {
 
 
 
-export { genRandomPasswordAsHash, encryptPassword, isPassRight };
+export { genRandomPassword, encryptPassword, isPassRight };

@@ -4,7 +4,7 @@ import IUserSettings from "../interfaces/IUserSettings";
 import User from "../models/User";
 import UserSettings from "../models/UserSettings";
 import signByJwt from "../utils/jwt.utils";
-import { isPassRight, genRandomPasswordAsHash } from "../utils/password.utils";
+import { isPassRight, genRandomPassword } from "../utils/password.utils";
 import { authCookieConfig } from '../config/authConfig';
 import sendEmail from "../utils/email.utils";
 import newPasswordTemplate from "../templates/emails/newPasswordTemplate";
@@ -44,11 +44,10 @@ const resetPassword = async (req: Request, res: Response) => {
         const { email }: { email: string } = req.body;
         const userData = await User.findOne<IUser>({ 'email': email });
 
-        if (userData) {
-            const userSettings = await UserSettings.findOne<IUserSettings>({userId: userData._id});
-            const settingsId = userSettings!._id as string;
+        if (!!userData) {
+            const settingsId = userData.settingsId as string;
 
-            const passwords = await genRandomPasswordAsHash();
+            const passwords = await genRandomPassword();
             await editExistingUserSettings({ password: passwords.passwordHash }, settingsId);
 
             const emailSubject = 'Your password in Delator has been reset'

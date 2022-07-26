@@ -7,6 +7,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    menuTitle: 'Delator',
     userId: '',
     userData: {},
     userSettings: {},
@@ -21,13 +22,17 @@ export default new Vuex.Store({
       { no: 1, title: 'settlement-by-day' },
       { no: 2, title: 'settlement-by-week' }
     ],
+    contractTypes: ['full-time', 'part-time', 'temporary'],
     languages: [
-      { shortName: 'no', fullName: 'Norsk' },
-      { shortName: 'pl', fullName: 'Polski' },
-      { shortName: 'en', fullName: 'English' },
+      { shortName: 'no', localeTag: 'no-NO', fullName: 'Norsk' },
+      { shortName: 'pl', localeTag: 'pl-PL', fullName: 'Polski' },
+      { shortName: 'en', localeTag: 'en-US', fullName: 'English' },
     ]
   },
   mutations: {
+    SET_MENU_TITLE(state, title) {
+      state.menuTitle = 'Delator - ' + title;
+    },
     SET_USER_ID(state, id) {
       state.userId = id;
     },
@@ -48,6 +53,9 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    setMenuTitle({ commit }, title) {
+      commit('SET_MENU_TITLE', title);
+    },
     setUserToken({ commit }, token) {
       commit('APPLY_USER_TOKEN', token);
     },
@@ -140,5 +148,10 @@ export default new Vuex.Store({
         }
       });
     },
+  },
+  getters: {
+    currentLanguage(state) {
+      return state.languages.find(languageObj => languageObj.shortName === state.userSettings.language);
+    }
   }
 })

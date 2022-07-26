@@ -2,13 +2,13 @@ import { maxResponseCount, filtersDefinition } from '../config/userSettingsReque
 import { calculateSkipLimit } from '../helpers/skipLimitCalculator';
 import { createQueryObject } from '../helpers/queryObjectCreators';
 import UserSettings from '../models/UserSettings';
-import IDynamicObject from "../interfaces/IDynamicObject";
+import IUserSettings from '../interfaces/IUserSettings';
 import IQueryError from '../interfaces/IQueryError';
 import IParams from '../interfaces/IParams';
 
+import IDynamicObject from '../interfaces/IDynamicObject';
 
-
-const saveNewUserSettings = async (body: IDynamicObject) => {
+const saveNewUserSettings = async (body: IUserSettings) => {
     try {
         const response = await new UserSettings(body).save();
         return response;

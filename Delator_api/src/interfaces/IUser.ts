@@ -5,5 +5,6 @@ export default interface IUser {
     email: string;
     phoneNumber?: number;
     photo?: string;
+    settingsId?: string;
     createDate?: Date;
 }

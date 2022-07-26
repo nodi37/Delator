@@ -7,20 +7,22 @@ export default {
     data: () => ({
         inputsDisabled: false,
         formData: {
-            userId: '',
-            userName: '',
             userEmail: '',
             companyId: '',
+            companyName: '',
             hourlyWage: '',
-            contractType: '',
-            employmentDimension: ''
+            //contractType: '',
+            //employmentDimension: '',
+            fromDate: new Date().toISOString(),
+            toDate: new Date().toISOString(),
+            permamentContract: false
         }
     }),
     methods: {
         submit() {
             if (this.$refs.form.validate()) {
                 this.inputsDisabled = true;
-                axios.post(process.env.VUE_APP_API_PATH + '/contract', this.formData, { withCredentials: true })
+                axios.post(process.env.VUE_APP_API_PATH + '/employment-contract/add', this.formData, { withCredentials: true })
                     .then(res => {
                         this.clearForm();
                         this.$emit('addedContract', res.data.data);
@@ -31,8 +33,25 @@ export default {
             }
         },
         clearForm() {
-            this.formData = {};
+            this.formData = {
+                userEmail: '',
+                companyId: '',
+                hourlyWage: '',
+                // contractType: '',
+                // employmentDimension: '',
+                fromDate: new Date().toISOString(),
+                toDate: new Date().toISOString(),
+                permamentContract: false
+            }
         }
+    },
+    watch: {
+        // 'formData.fromDate': (value) => {
+        //     console.log('from ' + value)
+        // },
+        // 'formData.toDate': (value) => {
+        //     console.log('to ' + value)
+        // },
     },
     components: {
         EmploymentContractInputs

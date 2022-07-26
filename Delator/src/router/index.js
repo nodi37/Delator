@@ -11,7 +11,7 @@ import SettingsRoute from '@/components/Routes/SettingsRoute';
 //SUNBROUTES
 import CompanyProperties from '@/components/Routes/Subroutes/CompanyProperties';
 import UserProperties from '@/components/Routes/Subroutes/UserProperties';
-
+import ContractProperties from '@/components/Routes/Subroutes/ContractProperties';
 
 Vue.use(VueRouter);
 
@@ -85,11 +85,12 @@ const routes = [
         component: SettingsRoute
       },
       //SUBROUTES
-      {
-        path: 'users/:companyId',
-        name: 'companyUsers',
-        component: UsersRoute
-      },
+
+      // {
+      //   path: 'users/:companyId',
+      //   name: 'companyUsers',
+      //   component: UsersRoute
+      // },
       {
         path: 'company/:companyId',
         name: 'companyEditor',
@@ -99,6 +100,11 @@ const routes = [
         path: 'user/:userId',
         name: 'userEditor',
         component: UserProperties
+      },
+      {
+        path: 'contract/:contractId',
+        name: 'contractEditor',
+        component: ContractProperties
       },
     ]
   }

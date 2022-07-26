@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export default {
     name: 'CompanySelector',
-    props: ['value', 'label', 'multiple', 'inputsDisabled'],
+    props: ['value', 'label', 'multiple', 'inputsDisabled', 'rules'],
     data: () => ({
         search: '',
         companiesData: [],
@@ -14,7 +14,7 @@ export default {
         fetchCompanies(value) {
             this.companiesLoading = true;
             const keyword = !!value ? `&keyword=${value}` : '';
-            axios.get(process.env.VUE_APP_API_PATH + `/company?limit=5${keyword}`, { withCredentials: true })
+            axios.get(process.env.VUE_APP_API_PATH + `/company/get-many?limit=5${keyword}`, { withCredentials: true })
                 .then(res => {
                     res.data.data.forEach((doc) => {
                         if (!this.companiesData.includes(doc)) {
@@ -26,7 +26,7 @@ export default {
         },
         fetchSingleCompany(value) {
             this.companiesLoading = true;
-            axios.get(process.env.VUE_APP_API_PATH + `/company/${value}`)
+            axios.get(process.env.VUE_APP_API_PATH + `/company/get/${value}`)
                 .then(res => {
                     if (!this.companiesData.includes(res.data.data)) {
                         this.companiesData.push(res.data.data);
@@ -68,7 +68,7 @@ export default {
 </script>
 
 <template>
-    <v-autocomplete v-model="model" :loading="companiesLoading" :search-input.sync="search" :items="companiesData"
+    <v-autocomplete v-model="model" :rules="rules" :loading="companiesLoading" :search-input.sync="search" :items="companiesData"
         item-text="companyName" item-value="_id" :label="$t(label)" :disabled="inputsDisabled"
         :no-data-text="$t('no-data')" deletable-chips clearable :multiple="multiple" outlined small-chips>
     </v-autocomplete>

@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import * as contractController from '../controllers/contract.controller';
+import * as contractController from '../controllers/employment.contract.controller';
 
 // const { validateRequestBody, validateRequestParams, validateRequestQuery } from '../middlewares/requestValidationMiddlewares');
 // //const { addContractSchema, editContractSchema, getManyContractsSchema } from '../validations/ContractValidation');

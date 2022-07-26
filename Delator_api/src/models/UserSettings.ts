@@ -3,11 +3,6 @@ import IUserSettings from '../interfaces/IUserSettings';
 
 
 const userSettingsSchema = new mongoose.Schema<IUserSettings>({
-    userId: {
-        type: String,
-        required: true
-    },
-
     superUser: {
         type: Boolean,
         required: true,

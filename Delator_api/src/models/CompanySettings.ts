@@ -2,15 +2,10 @@ import mongoose from 'mongoose';
 import ICompanySettings from '../interfaces/ICompanySettings';
 
 const companySettingsSchema = new mongoose.Schema<ICompanySettings>({
-
-    companyId: {
-        type: String,
-        required: true,
-        unique: true
-    },
-
     pricingPlan: {
-        type: Number
+        type: Number,
+        required: true,
+        default: 1
     },
 
     administratorsEmails: {
@@ -38,7 +33,6 @@ const companySettingsSchema = new mongoose.Schema<ICompanySettings>({
     breakTime: {
         type: Number
     }
-
 });
 
 const CompanySettings = mongoose.model<ICompanySettings>("companySettings", companySettingsSchema);

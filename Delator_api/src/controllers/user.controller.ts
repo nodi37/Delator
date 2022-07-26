@@ -59,7 +59,7 @@ const deleteUser = async (req: Request, res: Response) => {
     try {
         const response = await deleteSingleUser(req.params.id);
         if (response) {
-            res.status(201).json({ data: response });
+            res.status(200).json({ data: response });
         } else {
             res.status(404).json({ error: "Resource not found" });
         }

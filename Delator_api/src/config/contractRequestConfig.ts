@@ -2,8 +2,8 @@ const maxResponseCount = 10;
 
 const filtersDefinition = {
     keywordStringType: [
-        //'companyName',
-        //'companyDescription',
+        'companyName',
+        'userEmail',
         //'administratorsIds'
     ],
     keywordNumberType: [

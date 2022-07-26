@@ -59,7 +59,7 @@ app.use('/v1/company', companyRoutes);
 import companySettings from './routes/company.settings.routes';
 app.use('/v1/company-settings', companySettings);
 
-import contractRoutes from './routes/contract.routes';
+import contractRoutes from './routes/employment.contract.routes';
 app.use('/v1/employment-contract', contractRoutes);
 
 import reportRoutes from './routes/report.routes';

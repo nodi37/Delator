@@ -7,7 +7,7 @@ import {
     deleteSingleContract,
     getOneContract,
     getManyContracts
-} from "../services/contractService";
+} from "../services/employmentContractService";
 
 const addContract = async (req: Request, res: Response) => {
     try {

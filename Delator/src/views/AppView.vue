@@ -11,6 +11,11 @@ export default {
     isAppLoading: true,
     isDataLoaded: false
   }),
+  computed: {
+    title() {
+      return store.state.menuTitle;
+    }
+  },
   components: {
     NavigationDrawerList,
     DrawerUserProfile,
@@ -45,7 +50,7 @@ export default {
 
     <v-app-bar flat dense color="secondary" class="white--text" app>
       <v-app-bar-nav-icon color="white" @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>Delator</v-toolbar-title>
+      <v-toolbar-title>{{ title }}</v-toolbar-title>
     </v-app-bar>
 
     <v-main class="ma-1">

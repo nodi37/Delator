@@ -6,7 +6,7 @@ import CompanySettings from '../models/CompanySettings';
 import IParams from '../interfaces/IParams';
 
 
-const saveNewSettings = async (body: IDynamicObject) => {
+const saveNewSettings = async (body?: IDynamicObject) => {
     try {
         const response = await new CompanySettings(body).save();
         return response;

@@ -1,13 +1,12 @@
 import mongoose from 'mongoose';
+import IEmploymentContract from '../interfaces/IEmploymentContract';
 
-const employmentContractSchema = new mongoose.Schema({
-    userId: {
-        type: String,
-    },
-    userName: {
-        type: String,
-    },
+const employmentContractSchema = new mongoose.Schema<IEmploymentContract>({
     userEmail: {
+        type: String,
+        required: true
+    },
+    userId: {
         type: String,
         required: true
     },
@@ -15,42 +14,53 @@ const employmentContractSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    companyName: {
+        type: String,
+        required: true,
+    },
+//
+    // contractType: {
+    //     type: String
+    // },
+    // employmentDimension: {
+    //     type: Number
+    // },
 
     hourlyWage: {
         type: Number
     },
-    contractType: {
-        type: String
-    },
-    employmentDimension: {
-        type: Number
-    },
 
+    // contractHours: {
+    //     type: Number
+    // }, Add more things
+
+    // contractBreak: {
+    //     type: Number
+    // },
 
     fromDate: {
         type: Date
     },
+
     toDate: {
         type: Date
     },
 
-    archival: {
+    permamentContract: {
         type: Boolean
     },
 
-    files: {
-        type: Array
+    archival: {
+        type: Boolean,
+        default: false
     },
 
-    signDate: {
-        type: Date
-    },
-    lastChangeDate: {
-        type: Date
-    }
+
+    // signDate: {
+    //     type: Date
+    // }
 });
 
-const EmploymentContract = mongoose.model("employmentContract", employmentContractSchema);
-
+const EmploymentContract = mongoose.model<IEmploymentContract>("employmentContract", employmentContractSchema);
 
 export default EmploymentContract;

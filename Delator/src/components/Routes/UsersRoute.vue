@@ -113,13 +113,13 @@ export default {
             <ItemCard v-for="user in users" :key="user._id" :name="user.name + ' ' + user.lastName"
                 :description="user.email" :imgSrc="user.photo" :createDate="user.createDate" class="mb-2">
                 <template v-slot:actions>
-                    <v-btn color="#757575" class="white--text" @click="$router.push({ name: 'contractsRoute', query: { userId: user._id }})">
+                    <v-btn color="#757575" class="white--text" @click="$router.push({ name: 'contractsRoute', query: { userId: user._id, userName: user.name, userLastName: user.lastName }})">
                         {{ $t('contracts') }}
                     </v-btn>
-                    <v-btn color="#00796B" class="white--text" @click="$router.push({ name: 'reportsRoute', query: { userId: user._id }})">
+                    <v-btn color="#00796B" class="white--text" @click="$router.push({ name: 'reportsRoute', query: { userId: user._id, userName: user.name, userLastName: user.lastName }})">
                         {{ $t('reports') }}
                     </v-btn>
-                    <v-btn color="primary" @click="$router.push({ name: 'userEditor', params: { userId: user._id } })">
+                    <v-btn color="primary" @click="{ $router.push({ name: 'userEditor', params: { userId: user._id, userName: user.name, userLastName: user.lastName } })}">
                         {{ $t('properties') }}
                     </v-btn>
                     <v-btn color="#FF1744" class="white--text" @click="deleteUser(user._id)">

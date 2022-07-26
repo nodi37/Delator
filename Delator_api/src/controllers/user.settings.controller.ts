@@ -8,6 +8,12 @@ import {
     getOneUserSettings,
     getManyUserSettings
 } from "../services/userSettingsService";
+import { encryptPassword } from '../utils/password.utils';
+
+interface IEditReqBody {
+    language: string;
+    newPassword?: string;
+}
 
 const addUserSettings = async (req: Request, res: Response) => {
     try {
@@ -28,7 +34,15 @@ const addUserSettings = async (req: Request, res: Response) => {
 
 const editUserSettings = async (req: Request, res: Response) => {
     try {
-        const response = await editExistingUserSettings(req.body, req.params.id);
+        const body = req.body as IEditReqBody;
+        let response;
+
+        if (body.newPassword) {
+            const passwordHash = await encryptPassword(body.newPassword);
+            response = await editExistingUserSettings({ ...body, password: passwordHash }, req.params.id);
+        } else {
+            response = await editExistingUserSettings({ ...body }, req.params.id);
+        }
 
         if (response) {
             res.status(201).json({ data: response });

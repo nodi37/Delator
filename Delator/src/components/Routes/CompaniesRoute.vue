@@ -59,7 +59,7 @@ export default {
                 cancelBtnColor: 'primary'
             });
             if (ok) {
-                axios.delete(process.env.VUE_APP_API_PATH + `/company/${companyId}`)
+                axios.delete(process.env.VUE_APP_API_PATH + `/company/delete/${companyId}`)
                     .then(res => {
                         this.companies = this.companies.filter(val => val._id != companyId);
                     })

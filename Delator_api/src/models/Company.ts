@@ -30,6 +30,11 @@ const companySchema = new mongoose.Schema<ICompany>({
         type: String
     },
 
+    settingsId: {
+        type: String,
+        required: true
+    }
+
 });
 
 const Company = mongoose.model<ICompany>("Company", companySchema);

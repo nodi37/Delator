@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema<IUser>({
         type: String
     },
 
+    settingsId: {
+        type: String, 
+        required: true
+    },
     createDate: {
         type: Date,
         default: Date.now()
